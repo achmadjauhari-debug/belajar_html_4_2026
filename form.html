@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+body {
+    background-color: #dfa6a6;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 40px;
+}
+.container { /* Container for the form */
+
+    max-width: 600px; /* Set a maximum width for the container */
+    margin: 0 auto; /* Center the container */
+    /*margin: 0 25% 0 25% /* atas kanan bawah kiri */
+    background-color: #6a58d1;
+    padding: 3px 40px; /* Padding around the content */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); 
+    
+}
+h1 {
+    text-align: center; /* Center the heading */
+    color: #fff; /* White text color */
+    font-size: 28px; /* Larger font size */
+}
+
+.form-group {
+    margin-bottom: 20px; /* Space between form groups */
+}
+
+.form-group label {
+    display: block; /* Make labels block elements */
+    margin-bottom: 5px; /* Space below the label */
+    color: #030801e8; /* White text color for labels */
+}
+
+input[type="text"], input[type="date"],
+select,
+textarea {
+    width: 100%; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    border-radius: 8px; /* Rounded corners for inputs */
+    box-sizing: border-box; /* Include padding and border in width */
+}
+
+.checkbox-group,
+.radio-group {
+    /*margin-bottom: 20px; /* Space below the gender group */
+    display: flex; /* Keep radio buttons inline */
+    flex-direction: column; /* Stack checkboxes and radios vertically */
+    gap: 5px; /* Space between radio buttons */
+}
+
+button[type="submit"], button[type="reset"] {
+    background-color: #9d9aa0; /* Green background */
+    color: white; /* White text */
+    padding: 5px 20px; /* Padding inside buttons */
+    border: solid #000; /* Add border */
+    border-radius: 4px; /* Rounded corners for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 12px; /* Font size for buttons */
+}
+
+button[type="submit"]:hover, button[type="reset"]:hover {
+    background-color: #2b0cdb; /* Darker green on hover */
+
+}
+
+</style>
+
+
+</head>
+
+<body>
+    <div class="container">
+
+        <h1>Isi Form Pendaftaran Mahasiswa</h1>
+        <p>Tolong isi pendaftaran berikut:</p>
+        <form action="" method="post" enctype="multipart/form-data">
+            <hr>
+
+        <div class="form-group"><!-- form group for name input -->
+            <label for="name">Name :</label>
+            <input type="text" id="name" placeholder="Enter Your Name">
+        </div>
+
+        <div class="form-group">
+            <label for="hp">No. Tel./HP </label>
+            <input type="text" id="hp" name="hp" placeholder="Enter Your Phone Number">
+        </div>
+
+        <div class="form-group">
+            <label for="hoby">Hobby (boleh pilih banyak) :</label><br>
+        <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="hoby[]"> Musik</label>
+            <label class="checkbox-item"><input type="checkbox" name="hoby[]"> Memasak</label>
+            <label class="checkbox-item"><input type="checkbox" name="hoby[]"> Berenang</label>
+            <label class="checkbox-item"><input type="checkbox" name="hoby[]"> Mancing</label>
+            <label class="checkbox-item"><input type="checkbox" name="hoby[]"> Futsal</label>
+        </div>
+        </div>
+
+        <div class="form-group">
+            <div class="radio-group">            
+            <label for="">Jenis Kelamin :</label>
+            <label class="radio-item"><input type="radio" name="jeniskelamin" checked> Laki-laki</label>
+            <label class="radio-item"><input type="radio" name="jeniskelamin"> Perempuan</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="">Pilih Jurusan :</label>
+            <select name="jurusan" required>
+                <option value="">--pilih jurusan--</option>
+                <option value="Informasi">Sistem Informasi</option>
+                <option value="Komputer">Teknik Komputer</option>
+                <option value="Elektro">Teknik Elektro</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="">Upload Foto :</label>
+            <input type="file" name="foto">
+        </div>
+
+        <div class="form-group">
+            <label for="">Alamat :</label>
+            <textarea name="alamat" cols="30" rows="5">
+            </textarea>
+            <button type="submit">Kirim</button>
+            <button type="reset">Reset</button>
+        </div>
+        
+        <div class="form-group">
+            <label for="">Date of Birth :</label>
+            <input type="date" name="dob">
+        </div>
+
+        </form>
+
+    </div>
+
+</body>
+</html>

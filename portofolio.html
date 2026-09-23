@@ -13,7 +13,8 @@
     <header>
         <div class="nav-container">
             <h2 class="logo">Achmad Jauhari</h2>
-            <nav>
+            <button onclick="toogleMenu()">☰</button>
+            <nav id="menu">
                 <a href="#home">Home</a>
                 <a href="#ability">Ability </a>
                 <a href="#about">About</a>
@@ -36,8 +37,7 @@
     <section id="ability" class="normal-section">
     <div class="container">
         <h2>Keahlian Saya</h2>
-        <div class="wrapper">
-            
+        <div class="wrapper">       
             <div class="ability">
                 <h3>My Skills</h3>
                 <ul>
@@ -60,8 +60,6 @@
                 <h3>UI/UX Design</h3>
                 <p>Mampu merancang antarmuka pengguna yang intuitif dan pengalaman pengguna yang menyenangkan.</p>
             </div>
-
-
         </div>
 
     </div>
@@ -116,6 +114,11 @@
     <footer>
         <p>&copy; Portofolio Achmad Jauhari</p>
     </footer>
+    <script>
+        function toogleMenu() {
+            document.getElementById('menu').classList.toggle("tampil");
+        }
+    </script>
 </body>
 
 </html>

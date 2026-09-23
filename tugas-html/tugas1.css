@@ -1,0 +1,132 @@
+html,
+body {
+    background-color: grey;
+    /* min-height: 100vh; */
+    margin: 0;
+}
+
+nav {
+    padding: 10px;
+}
+
+nav > a {
+    text-decoration: none; /* Remove underline from links */
+    color: #fff;
+    font-weight: bold;
+    padding: 10px;
+}
+
+nav > a:hover {
+    color: #ffcc00; /* Change color on hover */
+}
+
+.home {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: rgba(80, 77, 77, 0.5); /* Semi-transparent background */
+    border-radius: 10px; /* Rounded corners */
+    width: auto; /* Limit width */
+    color: #fbf9fc; /* Text color */
+    font-weight: bold;
+    text-align: center;
+}
+
+.home > img {
+    width: 200px; /* Ensure images are responsive */
+    height: 200px; /* Maintain aspect ratio */
+    border-radius: 50%; /* Rounded corners for images */
+    margin-top: 20px; /* Space above the image */
+    object-fit: scale-down;
+}
+
+.overview {
+    margin-top: 20px;
+    padding: 20px;
+    width: auto; /* Limit width */
+    color: #fbf9fc; /* Text color */
+    text-align: center;
+}
+th, td {
+    border: 1px solid;
+}
+th {
+    background-color: black;
+}
+
+td {
+    text-align: left;
+    width: 300px;
+    height: 100px;
+}
+table {
+    display: flex;
+    justify-content: center;
+}
+/* .wrapper { 
+     display: flex;
+     text-align: left;
+     justify-content: center;
+     align-items: center;
+     width: auto;
+     background-color: blue;
+     height: 250px;
+     flex-wrap: wrap; */
+
+
+/* .ability > ul {
+    border: 1px solid;
+    padding: 20px;
+    gap: 20px;
+    border-radius: 10px;
+    width: 100px;
+    
+
+}
+.ability > h3 {
+    border: 1px solid;
+    padding: 20px;
+    gap: 20px;
+    border-radius: 10px;
+    width:100px;
+} */
+footer {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items:center;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+.contact-container{
+    padding: 20px;
+}
+
+.contact, .article, .about {
+    padding: 10px;
+}
+
+button[type="submit"], button[type="reset"] {
+    background-color: #9d9aa0; /* Green background */
+    color: white; /* White text */
+    padding: 5px 20px; /* Padding inside buttons */
+    border: solid #000; /* Add border */
+    border-radius: 4px; /* Rounded corners for buttons */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 12px; /* Font size for buttons */
+}
+
+button[type="submit"]:hover, button[type="reset"]:hover {
+    background-color: #150570; /* Darker green on hover */
+
+}
+input[type="text"],
+textarea {
+    width: 500px; /* Full width for inputs */
+    padding: 10px; /* Padding inside inputs */
+    border: 1px solid #ccc; /* Light gray border */
+    box-sizing: border-box; /* Include padding and border in width */
+}

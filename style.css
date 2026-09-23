@@ -181,6 +181,9 @@ footer {
     padding: 1rem;
     text-align: center;
 }
+.nav-container > button {
+    display: none;
+    }
 
 
 @media (max-width: 480px) {
@@ -204,5 +207,30 @@ footer {
         display: grid;
         grid-template-columns: repeat(1, 1fr);
         
+    }
+    .nav-container > button {
+        margin-right: 25px;
+        display: block;
+    }
+
+    nav {
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        background-color: rgba(249, 228, 190, 0.7);
+        width: auto;
+        padding: 15px 0px;
+        right: 25px;
+        top: 60px;
+    }
+    nav > a {
+        padding: 10px;
+        color: #333;
+    }
+    nav > a:hover {
+        color: rgb(204, 159, 10);
+    }
+    nav.tampil {
+        display: flex;
     }
 }

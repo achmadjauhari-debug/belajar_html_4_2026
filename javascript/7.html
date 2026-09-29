@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM | Document Object Model</title>
+  </head>
+
+  <body>
+    <h1 id="title">Text Awal</h1>
+    <p id="description">Description Awal</p>
+    <p id="status">Status Awal</p>
+    <!--id sifatnya unique, kalau class bisa sama -->
+
+    <!-- create elemen -->
+    <div id="modul">ini modul dalam div</div>
+
+    <!-- setelah buat modulUl di script baru buat modulUl -->
+     <ul id="modulUl"></ul>
+
+    <script>
+      const body = document.body;
+      const title = document.getElementById("title");
+      const desc = document.getElementById("description");
+      const status = document.querySelector("#status");
+
+      body.style.backgroundColor = "green";
+      title.style.color = "white";
+      title.innerText = "PPKD Jakarta Pusat";
+
+      desc.style.color = "white";
+      desc.innerText = "Selamat Datang di PPKD Jakarta Pusat";
+
+      status.style.color = "white";
+      status.innerText = "Tersertifikasi BNSP";
+
+      const listUnit = [
+        "J.620100.005.02 - Mengimplementasikan User Interface",
+        "J.620100.011.01 - Melakukan Instalasi Software Tools Pemograman",
+      ];
+
+      // create element
+      const modul = document.getElementById("modul");
+      const modulUl =  document.getElementById("modulUl")
+
+      listUnit.forEach((unitText) => {
+        const itemLi = document.createElement('li')
+
+        itemLi.innerText = unitText;
+        itemLi.style.marginBottom="8px";
+        
+        modulUl.appendChild(itemLi)
+
+      })
+      // createElement(); : div, p1, h2
+      const isiModul = document.createElement("p");
+      isiModul.innerText = "Laravel adalah framework PHP";
+      isiModul.style.color = "white";
+      modul.appendChild(isiModul); //untuk menggabungkan isi modul
+    </script>
+  </body>
+</html>

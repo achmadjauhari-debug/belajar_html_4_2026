@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+<h1 id="heading" class="headingclass">Selamat Datang di PPKD Jakarta Pusat</h1>
+<p id="isiText">isiText</p>
+<h3 id="heading3">Duar</h3>
+<h3>H1</h3>
+<h3>H2</h3>
+<h3>H3</h3>
+
+
+
+
+</body>
+
+<script>
+document.getElementById(`isiText`).innerText=`tambahan`
+
+const heading = document.querySelector(`h1`)
+const headingId = document.getElementById(`heading`)
+const headingClass = document.getElementsByClassName(`headingclass`)
+const heading3 = document.querySelector(`h3`)
+const heading3All = document.querySelectorAll(`h3`)
+console.log(heading3All)
+
+//paling simple pake querySelector
+// const heading = document.querySelector(`h1`)
+// const heading = document.querySelector(`#heading`)
+// const heading = document.querySelector(`.headingclass`)
+
+console.log(heading)
+
+//innerText
+//textContent
+//innerHtml
+heading.innerText = "Selamat Datang di Pusat Pelatihan Kerja Jakarta Pusat"
+heading.textContent = "Selamat Datang di Pusat Pelatihan Kerja Jakarta Pusat (textcontent)"
+heading.innerHTML = "Selamat Datang di <u>Pusat Pelatihan Kerja Jakarta Pusat</u>"
+
+//object : struktur data, kalau array pakai kurung kota [], kalau object pakai kurung kurawal {}
+let peserta = {
+    nama: "Reza", // key = nama, value=reza, objectnya=nama
+    alamat: "Bekasi Jawa Barat",
+    jurusan: "Web Programming",
+}
+// kalau di dalam object manggilnya pakai titik .
+//kalau keynya ada spasi tidak bisa di panggil pakai array ex. "alamat lengkap"
+
+console.log(peserta.nama)
+console.log(peserta.jurusan)
+console.log(peserta["alamat"]);
+//untuk tambah object baru
+peserta.nilai = 80;
+console.log(peserta)
+
+delete peserta.nilai;
+peserta.status = "Baru";
+peserta['email'] = "reza@gmail.com"; //[] yg di panggil arraynya, bukan indexnya
+console.log(peserta);
+
+//kalau mau nambah banyak peserta menggunakan array
+const siswa = [
+    {
+        id:1,
+        nama:"Rudi",
+        nilai: 80
+    },
+    {
+        id:2,
+        nama:"Wawan",
+        nilai: 50
+    },
+    {
+        id:3,
+        nama: "Ratna",
+        nilai: 75
+    }
+]
+console.log(siswa);
+
+//looping - data = variable alias
+siswa.forEach(function(data, index){console.log("siswa", data)}); //function biasa
+
+// es 6 : ecmascript Arrow Function array.forEach(element => { });
+siswa.forEach((data, index) => {
+    console.log("data siswa", data),
+    console.log(`data siswa dengan index ${index} yaitu bernama ${data.nama}`)
+});
+
+const siswaLulus = siswa.filter((s) => {return s.nilai >= 75})
+
+console.log(siswaLulus);
+
+
+</script>
+</html>

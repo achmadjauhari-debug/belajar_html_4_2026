@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const nilai1 = parseInt(1);
+      const nilai2 = parseInt(1);
+      const jumlah = nilai1 + nilai2; //concanate (+) penggabung string
+
+      console.log(jumlah);
+
+      // assignment operator : menambahkan nilai ke dalam suatu variable
+      let total = 100;
+      total += 20;
+      total -= 50;
+      console.log(total);
+
+      // operator increment dan decrement : menambah dan mengurang
+      let nomor = 1;
+      nomor++;
+      nomor--;
+
+      // operator perbandingan : <, >, == (mebandingkan) ===(membandingkan sampai tipe data) !==(tidak sama dengan)
+
+      let nama = "10";
+      let konfirmasiNama = 10;
+      let konfirmasi = nama == konfirmasiNama; //true karena isinya sama2 10 tidak mebandingkan tipe data
+      console.log(konfirmasi);
+
+      let umur = 17;
+      let batasUmur = 17;
+      let batasan = umur > 17; //false
+
+      let username = "admin";
+      let password = "password"(
+        username === ("admin" && password === "password")
+      
+        //login sukses/true
+        username === "admin" || password === "admin",
+      ); //login sukses/true
+
+      //operator ternary
+      const age = 20;
+      if (age >= 17) {
+        console.log("Dewasa");
+      } else {
+        console.log("anak-anak");
+      }
+
+      const statusAge = age >= 17 ? "Dewasa" : "Anak-anak";
+      console.log(statusAge);
+    </script>
+  </body>
+</html>

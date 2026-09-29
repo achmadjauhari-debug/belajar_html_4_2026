@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <script>
+//array : struktur data yang bisa menyimpan datanya lebih dari 1
+let nama = ["Budi","Laras","Andi"] //ada indexingnya 0,1,2...
+const keranjang = ["Buah","Sayuran","Ikan"]
+console.log(nama[0])
+console.log(nama[1])
+console.log(nama[2])
+console.log(keranjang[3]) //kalau tidak ada di array -> undefined
+//length di js, kalau di php count -> count(nama)
+const total = nama.length
+console.log(total)
+console.log(nama.length)
+//ganti nilai andi
+nama[2] = "Agung"
+console.log(nama);
+//nambahin array
+nama.push(`Raka`);
+console.log(nama);
+console.log(nama.length);
+//di js . object kalau di php ->
+//function ada yg buatan sendiri ada yg dari jsnya
+//nambahin array biat muncul di paling depan -> unshift
+nama.unshift("Rozak");
+console.log(nama);
+
+//indexOf: method/function
+const target = nama.indexOf("Budi")
+console.log(target);
+
+//spread operator : ... mengcopy array dari variable yg sdh ada daripada copy satu2
+nama = [...nama, "Wawan"]
+console.log(nama);
+
+
+</script>
+    
+</body>
+</html>

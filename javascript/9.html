@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DOM To Do List</title>
+  </head>
+
+  <body>
+    <h2>Daftar Rencana Kerja</h2>
+    <input type="text" id="task" placeholder="Masukan tugas baru .." />
+    <button id="tambah">Tambah</button>
+    <ul id="tasks"></ul>
+
+    <script>
+
+      const taskName = document.getElementById("task");
+      const listTasks = document.getElementById("tasks");
+
+      function createTask() {
+        const task = taskName.value;
+        if (task === "") {
+          alert("task tidak boleh kosong");
+          taskName.focus(); // begitu keluar alert langsung focus ke input box
+          return;
+        }
+        // createElement
+        const li = document.createElement("li");
+        li.innerText = task;
+
+        li.innerHTML = `
+            <span>${task}</span>
+            <button class="btn-remove">Hapus</button>    
+        `
+
+        listTasks.appendChild(li);
+        taskName.value = ""; // buat ngilangin apa yg kita tulis di box
+
+        // const btnRemove = document.createElement("button");
+        // btnRemove.innerText = "Hapus";
+        // li.appendChild(btnRemove);
+
+        // btnRemove.addEventListener('click', function() {
+        //     li.remove();
+        // })
+        // button disini akan memberatkan, harusnya di luar function
+      }
+      //karena button remove akan di pakai berulang kali, bisa pakai class
+
+      document.getElementById("tambah").addEventListener("click", function () {
+        createTask();
+      });
+      taskName.addEventListener("keyup", function (event) {
+        if (event.key === "Enter") {
+          createTask();
+        }
+      });
+
+      listTasks.addEventListener('click', (e) => {
+        // cek ada gak si element yg mengandung kata class btn-remove
+        if(e.target.classList.contains('btn-remove')) {
+            console.log(e)
+            const li = e.target.parentElement;
+            li.remove();
+        }
+    })
+
+    </script>
+  </body>
+</html>

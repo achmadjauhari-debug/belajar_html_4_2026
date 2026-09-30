@@ -1,20 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<html>
 <body>
-    <script>
+<h1>JavaScript Events</h1>
+<h2>Adding and Removing Events</h2>
 
-function toCelcius(fahrenheit){
-    return (5/9)*(fahrenheit-32);
+<button id="add">Add</button>
+<button id="remove">Remove</button>
+<button id="test">Test click</button>
+<p id="demo">p</p>
+
+<script>
+const test = document.getElementById("test");
+const remove = document.getElementById("remove");
+const add = document.getElementById("add");
+
+function myFunction() {
+  document.getElementById("demo").innerHTML += "Hello!";
 }
-console.log(`The temperature is = ${toCelcius(60)} Celcius`)
 
 
+  test.addEventListener("click", myFunction);
+  add.addEventListener("click", myFunction);
 
-    </script>
+// Let remove listen for click
+remove.addEventListener("click", )
+
+</script>
+
 </body>
 </html>

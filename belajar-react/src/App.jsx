@@ -16,8 +16,10 @@ function App() {
     if (editPeserta) {
       //edit data
       setListPeserta(
-        listPeserta.map((item) => (item.id === dataPeserta.id ? dataPeserta : item)),
-        setEditPeserta(null) //biar kembali ke kondisi awal setelah edit selesai
+        listPeserta.map((item) =>
+          item.id === dataPeserta.id ? dataPeserta : item,
+        ),
+        setEditPeserta(null), //biar kembali ke kondisi awal setelah edit selesai
       );
     } else {
       //tambah data
@@ -38,7 +40,12 @@ function App() {
       {/* <FormPeserta /> */}
       {/* map : ini looping juga dari forEach */}
       {listPeserta.map((item) => (
-        <DataPeserta key={item.id} peserta={item} onEdit={setEditPeserta} onHapus={handleHapus} />
+        <DataPeserta
+          key={item.id}
+          peserta={item}
+          onEdit={setEditPeserta}
+          onHapus={handleHapus}
+        />
       ))}
     </>
   );

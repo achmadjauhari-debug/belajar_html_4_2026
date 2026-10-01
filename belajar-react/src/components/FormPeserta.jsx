@@ -1,25 +1,30 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 
-const FormPeserta = ({ onSimpan, onCancel,pesertaEdit }) => {
+const FormPeserta = ({ onSimpan, onCancel, pesertaEdit }) => {
   const [nama, setNama] = useState("");
   const [jurusan, setJurusan] = useState("");
-// useEffect : hasil request dari server menghasilkan sebuah data, di render cuma 1x
-// useEffect(() => {
+  const [error, setError] = useState("");
+  // useEffect : hasil request dari server menghasilkan sebuah data, di render cuma 1x
+  // useEffect(() => {
 
-    useEffect(() => {
-        if (pesertaEdit) {
-            //edit data
-            setNama(pesertaEdit.nama);
-            setJurusan(pesertaEdit.jurusan);
-        } else {
-            //tambah data
-            setNama("");
-            setJurusan("");
-        }
-    },[pesertaEdit]);
+  useEffect(() => {
+    if (pesertaEdit) {
+      //edit data
+      setNama(pesertaEdit.nama);
+      setJurusan(pesertaEdit.jurusan);
+    } else {
+      //tambah data
+      setNama("");
+      setJurusan("");
+    }
+  }, [pesertaEdit]);
 
   const handleSimpan = (e) => {
     e.preventDefault();
+    0;
+    if (!nama.trim() || !jurusan.trim()) setError("Mohon isi nama dan jurusan");
+    return alert("Nama dan jurusan tidak boleh kosong");
+  
     // mencegah permintaan ke server
     // alert("DUAR");
     //jika dia edit
@@ -30,7 +35,7 @@ const FormPeserta = ({ onSimpan, onCancel,pesertaEdit }) => {
       nama,
       jurusan,
     });
-    setNama("");// mengosongkan input setelah disimpan
+    setNama(""); // mengosongkan input setelah disimpan
     setJurusan("");
   };
 

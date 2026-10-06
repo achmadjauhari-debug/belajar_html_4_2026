@@ -1,7 +1,18 @@
 // Tampilan Page Login
-import { Form, Button, Container, Card } from "react-bootstrap";
+// import { Form, Button, Container, Card } from "react-bootstrap";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -31,54 +42,106 @@ export default function Login() {
 
   // Container
   return (
-    <Container className="d-flex align-items-center justify-content-center min-vh-100">
-      {/* untuk ngecek */}
-      <p>Email : {formData.email} </p>
-      <p>Password : {formData.password}</p>
-
-      <div className="w-100 d-flex align-items-center justify-content-center">
-        <Card className="shadow" style={{ width: "400px" }}>
-          <Card.Body className="p-4">
-            <h2 className="font-weight-bold text-center mb-4">Login Form</h2>
-
-            <Form>
-              <Form.Group className="mb-3">
-                <Form.Label>Email</Form.Label>
-                <Form.Control
+    <>
+      <div className="flex min-h-screen justify-center bg-muted/40 p-4"></div>
+      <div className="w-full max-w-md">
+        <div className="mb-6 flex flex-col items-center">
+          <div className="mb-2 flex h-12 w-12 items-start justify-center rounded-sm shadow"></div>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Point of Sales | PPKD JP
+          </h1>
+          <p className="text-sm text-muted">Point of Sales</p>
+        </div>
+        <Card className="shadow-lg border-1">
+          <CardHeader className="space-y-1 pb-4">
+            <CardTitle className="text-lg font-semibold">
+              Sign In Your Account
+            </CardTitle>
+            <CardDescription>Enter Your Credentials</CardDescription>
+          </CardHeader>
+          <form onSubmit={handleLogin}>
+            <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label>Email</Label>
+                <Input
+                  id="email"
                   name="email"
+                  type="email"
                   value={formData.email}
                   onChange={handleChange}
-                  type="email"
+                  placeholder="Enter Your Email"
                   required
-                  placeholder="your.name@email.com"
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
+                  autofocus
+                />
+              </div>
+              <div className="space-y-2">
+                <Label>Password</Label>
+                <Input
+                  id="password"
                   name="password"
+                  type="password"
                   value={formData.password}
                   onChange={handleChange}
-                  type="password"
+                  placeholder="Enter Your Password"
                   required
-                ></Form.Control>
-              </Form.Group>
-
-              <Form.Group>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="w-100"
-                  onClick={handleLogin}
-                >
-                  {isLoading ? "Loading..." : "Sign In"}
-                </Button>
-              </Form.Group>
-            </Form>
-          </Card.Body>
+                />
+              </div>
+            </CardContent>
+            <CardFooter className="flex flex-col gap-3 pt-3">
+              <Button type="submit" className="w-full">Sign In</Button>
+            </CardFooter>
+          </form>
         </Card>
       </div>
-    </Container>
+      {/* <Container className="d-flex align-items-center justify-content-center min-vh-100">
+        untuk ngecek
+        <p>Email : {formData.email} </p>
+        <p>Password : {formData.password}</p>
+
+        <div className="w-100 d-flex align-items-center justify-content-center">
+          <Card className="shadow" style={{ width: "400px" }}>
+            <Card.Body className="p-4">
+              <h2 className="font-weight-bold text-center mb-4">Login Form</h2>
+
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    type="email"
+                    required
+                    placeholder="your.name@email.com"
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    type="password"
+                    required
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="w-100"
+                    onClick={handleLogin}
+                  >
+                    {isLoading ? "Loading..." : "Sign In"}
+                  </Button>
+                </Form.Group>
+              </Form>
+            </Card.Body>
+          </Card>
+        </div>
+      </Container> */}
+    </>
   );
 }

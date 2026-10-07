@@ -1,6 +1,21 @@
-import { Card, Form, Button, Table, Modal } from "react-bootstrap";
+// import { Card, Form, Button, Table, Modal } from "react-bootstrap";
 import { useState } from "react";
 import AppModal from "../../components/AppModal";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardAction,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+
+
 
 const dataUsers = [
   {
@@ -92,8 +107,8 @@ const ListUser = () => {
 
   return (
     <>
-      <Card className="shadow-sm border-0">
-        <Card.Body>
+      <Card className="shadow-sm border-border p-6">
+        <CardContent className="p-0">
           <div className="d-flex justify-content-between align-items-center mb-3">
             <div>
               <h4 className="mb-0 fw-bold">Data User</h4>
@@ -102,24 +117,24 @@ const ListUser = () => {
               Create New User
             </Button>
           </div>
-          <Table responsive hover bordered className="align-middle mb-0">
-            <thead>
+          <table className="w-full text-left text-sm">
+            <thead className="border-y bg-muted/30 text-xs uppercase text-muted-foreground">
               <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th className="px-6 py-3 font-medium">#</th>
+                <th className="px-6 py-3 font-medium">Name</th>
+                <th className="px-6 py-3 font-medium">Email</th>
+                <th className="px-6 py-3 font-medium">Status</th>
+                <th className="px-6 py-3 font-medium">Action</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y divide-border">
               {users.map((user, index) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
+                <tr key={index} className="hover:bg-muted/50 transition-colors">
+                  <td className="px-4 py-6 whitespace-nowrap">{index + 1}</td>
                   <td>{user.name}</td>
                   <td>{user.email}</td>
                   <td>Active</td>
-                  <td>
+                  <td className="pk-4 py-6 text-right whitespace-nowrap">
                     <Button
                       onClick={() => handleEditModal(user)}
                       variant="warning"
@@ -140,8 +155,8 @@ const ListUser = () => {
                 </tr>
               ))}
             </tbody>
-          </Table>
-        </Card.Body>
+          </table>
+        </CardContent>
       </Card>
 
       {/* <Modal show={showModal} onHide={handleCloseModal}>
@@ -205,7 +220,7 @@ const ListUser = () => {
         submitLabel={isEdit ? "Save Change" : "Save New User"}
       >
 
-          <Form.Group className="mb-3">
+          {/* <Form.Group className="mb-3">
             <Form.Label>Name</Form.Label>
             <Form.Control
               type="text"
@@ -239,7 +254,7 @@ const ListUser = () => {
               value={formData.password}
               onChange={handleChange}
             ></Form.Control>
-          </Form.Group>
+          </Form.Group> */}
    
       </AppModal>
     </>

@@ -1,5 +1,15 @@
 //props
-import { Modal, Button } from "react-bootstrap";
+// import { Modal, Button } from "react-bootstrap";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const AppModal = ({
   show,
@@ -7,31 +17,37 @@ const AppModal = ({
   onSubmit,
   isLoading = false,
   showFooter = true,
-  size = "md",
   title,
   children,
-  submitLabel = "Simpan",
-  cancelLabel = "Batal",
+  submitLabel = "Save",
+  cancelLabel = "Cancel",
 }) => {
   return (
-    <Modal show={show} onHide={onClose} size={size}>
-      <Modal.Header closeButton>
-        <Modal.Title>{title}</Modal.Title>
-      </Modal.Header>
-      <form onSubmit={onSubmit}>
-        <Modal.Body>{children}</Modal.Body>
-        {showFooter && (
-          <Modal.Footer>
-            <Button variant="secondary" onClick={onClose}>
-              {cancelLabel}
+    <Dialog open={show} openChange={onClose}>
+      <DialogContent className="sm:max-w-[540px]">
+        <DialogHeader>
+          <DialogTitle>{title}</DialogTitle>
+          <DialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={onSubmit}>
+          <div className="py-2"> {children}</div>
+          <DialogFooter>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Loading..." : submitLabel}{" "}
             </Button>
-            <Button type="submit" variant="primary" disabled={isLoading}>
-              {isLoading ? 'Simpan...' : submitLabel}
-            </Button>
-          </Modal.Footer>
-        )}
-      </form>
-    </Modal>
+            <Button
+              variant="outline"
+              onClick={() => onClose(false)}
+              type="submit"
+              disable
+            ></Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
   );
 };
 

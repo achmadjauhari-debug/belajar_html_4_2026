@@ -9,10 +9,11 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+  CardAction,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Button } from "../components/ui/button";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -25,10 +26,10 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const handleChange = (e) => {
     //prev : params
-    console.log("Input change ${e.target.name} = ${e.target.value}");
+    // console.log("Input change ${e.target.name} = ${e.target.value}");
 
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-    console.log(e.target.value);
+    // console.log(e.target.value);
   };
 
   const handleLogin = (e) => {
@@ -43,57 +44,73 @@ export default function Login() {
   // Container
   return (
     <>
-      <div className="flex min-h-screen justify-center bg-muted/40 p-4"></div>
-      <div className="w-full max-w-md">
-        <div className="mb-6 flex flex-col items-center">
-          <div className="mb-2 flex h-12 w-12 items-start justify-center rounded-sm shadow"></div>
-          <h1 className="text-2xl font-bold tracking-tight">
-            Point of Sales | PPKD JP
-          </h1>
-          <p className="text-sm text-muted">Point of Sales</p>
+      <div className="flex min-h-screen justify-center bg-muted/40 p-4">
+        <div className="w-full max-w-md">
+          <div className="mb-6 flex flex-col items-center">
+            <div className="mb-2 flex h-12 w-12 items-start justify-center rounded-sm shadow">
+              <img src="../src/github.png"></img>
+            </div>
+            <h1 className="text-2xl font-bold tracking-tight">
+              Point of Sales | PPKD JP
+            </h1>
+            <p className="text-sm text-muted">Point of Sales</p>
+          </div>
+          <Card className="shadow-lg border-border p-6">
+            <CardHeader className="space-y-1 pb-4">
+              <CardTitle className="text-lg font-semibold">
+                Sign In Your Account
+              </CardTitle>
+              <CardDescription>Enter Your Credentials</CardDescription>
+              <CardAction>
+                <Button variant="link">Sign Up</Button>
+              </CardAction>
+            </CardHeader>
+            <form onSubmit={handleLogin}>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter Your Email"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter Your Password"
+                    required
+                  />
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col gap-3 pt-3">
+                <Button type="submit" className="w-full">
+                  Sign In
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Login with Google
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
         </div>
-        <Card className="shadow-lg border-1">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-lg font-semibold">
-              Sign In Your Account
-            </CardTitle>
-            <CardDescription>Enter Your Credentials</CardDescription>
-          </CardHeader>
-          <form onSubmit={handleLogin}>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label>Email</Label>
-                <Input
-                  id="email"
-                  name="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Enter Your Email"
-                  required
-                  autofocus
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Password</Label>
-                <Input
-                  id="password"
-                  name="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  placeholder="Enter Your Password"
-                  required
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="flex flex-col gap-3 pt-3">
-              <Button type="submit" className="w-full">Sign In</Button>
-            </CardFooter>
-          </form>
-        </Card>
-      </div>
-      {/* <Container className="d-flex align-items-center justify-content-center min-vh-100">
+        {/* <Container className="d-flex align-items-center justify-content-center min-vh-100">
         untuk ngecek
         <p>Email : {formData.email} </p>
         <p>Password : {formData.password}</p>
@@ -142,6 +159,7 @@ export default function Login() {
           </Card>
         </div>
       </Container> */}
+      </div>
     </>
   );
 }

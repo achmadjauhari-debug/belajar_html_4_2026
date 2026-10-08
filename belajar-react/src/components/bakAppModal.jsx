@@ -48,4 +48,4 @@ const AppModal = ({
   );
 };
 
-export default AppModal;
+export default BakAppModal;

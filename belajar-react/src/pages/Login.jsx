@@ -1,5 +1,6 @@
 // Tampilan Page Login
 // import { Form, Button, Container, Card } from "react-bootstrap";
+import { AlertCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,6 +12,12 @@ import {
   CardTitle,
   CardAction,
 } from "../components/ui/card";
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
@@ -24,6 +31,8 @@ export default function Login() {
   };
   const [formData, setFormData] = useState(_initialForm);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
   const handleChange = (e) => {
     //prev : params
     // console.log("Input change ${e.target.name} = ${e.target.value}");
@@ -32,13 +41,35 @@ export default function Login() {
     // console.log(e.target.value);
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(
+          result.message || "Please check your email and password",
+        );
+      }
+      localStorage.setItem("", result.data.token);
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/dashboard");
+      }, 0);
+    } catch (error) {
+      console.log(error.message);
+      setErrorMsg(error.message);
+    } finally {
       setIsLoading(false);
-      navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   // Container
@@ -61,6 +92,20 @@ export default function Login() {
                 Sign In Your Account
               </CardTitle>
               <CardDescription>Enter Your Credentials</CardDescription>
+
+              {/* <Alert variant="destructive" className="max-w-md">
+                <AlertCircleIcon />
+                <AlertTitle>{errorMsg}</AlertTitle>
+              </Alert> */}
+
+              {errorMsg && (
+                <p className="text-red-900 flex items-center gap-2">
+      
+                    <AlertCircleIcon /> {errorMsg}
+          
+                </p>
+              )}
+
               <CardAction>
                 <Button variant="link">Sign Up</Button>
               </CardAction>

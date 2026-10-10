@@ -153,25 +153,47 @@ export const updateUser = async (req, res) => {
     return res.status(200).json({
       status: true,
       message: "Update user success",
-      data:  {id, name, email }
+      data: { id, name, email },
     });
   } catch (error) {}
 };
 
-export const deleteUser = (req, res) => {
-  const id = parseInt(req.params.id);
-  const userIndex = USERS.findIndex((u) => u.id === id);
+export const deleteUser = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    // if (!id) {
+    //   return res.status(404).jsonm({
+    //     status: false,
+    //     message: "Not Found"
+    //   })
+    // }
 
-  if (userIndex === -1) {
-    return res.status(404).json({
+    await pool.query("DELETE FROM users WHERE id=?", [id]);
+    //tidak pakai const [user] karena cuma delete berdasarkan id
+
+    return res.status(200).json({
+      status: true,
+      message: "DELETE IS SUCCESS",
+    });
+  } catch (error) {
+    return res.status(500).json({
       status: false,
-      message: "User not found",
+      message: error.message,
     });
   }
-
-  const deletedUser = USERS.splice(userIndex, 1)[0];
-  return res.status(200).json({
-    status: true,
-    message: "Delete user success",
-  });
 };
+
+// const userIndex = USERS.findIndex((u) => u.id === id);
+
+// if (userIndex === -1) {
+//   return res.status(404).json({
+//     status: false,
+//     message: "User not found",
+//   });
+// }
+
+// const deletedUser = USERS.splice(userIndex, 1)[0];
+// return res.status(200).json({
+//   status: true,
+//   message: "Delete user success",
+// });

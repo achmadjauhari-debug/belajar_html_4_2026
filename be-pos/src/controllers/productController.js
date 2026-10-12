@@ -14,35 +14,47 @@ export const getAllProducts = async (req, res) => {
 
 //get one data
 export const getOneProduct = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const [product] = await pool.query(
-    "SELECT products.*, categories.name AS category_namezzzxx FROM products LEFT JOIN categories ON products.category_id=categories.id where products.id=?",
-    [id],
-  );
-  return res.status(200).json({
-    status: true,
-    total: product.length,
-    data: product,
-  });
+  try {
+    const id = parseInt(req.params.id);
+    const [product] = await pool.query(
+      "SELECT products.*, categories.name AS category_namezzzxx FROM products LEFT JOIN categories ON products.category_id=categories.id WHERE products.id=?",
+      [id],
+    );
+    // gagal
+    if (product.length === 0) {
+      return res
+        .status(404)
+        .json({ status: false, message: "Product is not Found" });
+    }
+    // sukses
+    return res.status(200).json({
+      status: true,
+      total: product.length,
+      data: product,
+    });
+  } catch (error) {
+    return res.status(500).json({ status: false, message: error.message });
+  }
 };
+
 //create
 export const createProduct = async (req, res) => {
   try {
-    const { id, category_id, name, price, stock, description, is_Active } = req.body;
+    const { category_id, name, price, stock, description } = req.body;
     if (!name) {
       return res.status(400).json({
         status: false,
         message: "Name is required",
       });
     }
-    const category = await pool.query(
-      "INSERT INTO products(id,category_id,name,price,stock,description, is_Active) VALUES (?,?,?,?,?,?,?)",
-      [id, category_id, name, price, stock, description, is_Active],
+    await pool.query(
+      "INSERT INTO products(category_id,name,price,stock,description) VALUES (?,?,?,?,?)",
+      [category_id, name, price, stock, description],
     );
     return res.status(201).json({
       status: true,
       // data: category,
-      message: "Insert is Successful",
+      message: "Create Product is Successful",
     });
   } catch (error) {
     if (error.code === "ER_DUP_ENTRY") {
@@ -59,4 +71,42 @@ export const createProduct = async (req, res) => {
 };
 
 //update
+export const updateProduct = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+    const { category_id, name, price, stock, description, is_Active } =
+      req.body;
+    await pool.query(
+      "UPDATE products SET category_id=?,name=?,price=?,stock=?,description=?, is_Active=? WHERE id=?",
+      [category_id, name, price, stock, description, is_Active ?? 1, id],
+    );
+    return res.status(200).json({
+      status: true,
+      // data: category,
+      message: "Update Product is Successful",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+    });
+  }
+};
 //delete
+
+export const deleteProduct = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    await pool.query("DELETE FROM products WHERE id=?", [id]);
+    return res.status(200).json({
+      status: true,
+      message: "Delete is Success",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+    });
+  }
+};

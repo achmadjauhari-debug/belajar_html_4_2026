@@ -1,25 +1,25 @@
 import pool from "../config/db.js";
 
-const USERS = [
-  {
-    id: 1,
-    name: "Reza",
-    email: "admin@gmail.com",
-    password: "12345678",
-  },
-  {
-    id: 2,
-    name: "Ratna",
-    email: "ratna@gmail.com",
-    password: "12345678",
-  },
-  {
-    id: 3,
-    name: "Laras",
-    email: "laras@gmail.com",
-    password: "12345678",
-  },
-];
+// const USERS = [
+//   {
+//     id: 1,
+//     name: "Reza",
+//     email: "admin@gmail.com",
+//     password: "12345678",
+//   },
+//   {
+//     id: 2,
+//     name: "Ratna",
+//     email: "ratna@gmail.com",
+//     password: "12345678",
+//   },
+//   {
+//     id: 3,
+//     name: "Laras",
+//     email: "laras@gmail.com",
+//     password: "12345678",
+//   },
+// ];
 
 // crud (create read update delete)
 
@@ -142,21 +142,35 @@ export const createUser = async (req, res) => {
 };
 
 export const updateUser = async (req, res) => {
-  const id = parseInt(req.params.id);
-  const { name, email, password } = req.body;
   try {
-    const [user] = await pool.query(
-      "UPDATE users SET name=?, email=?, password=? WHERE id=?",
-      [name, email, password, id],
-    );
+    const id = parseInt(req.params.id);
+    const { name, email, password, is_Active } = req.body;
+    if (!password) {
+      const [user] = await pool.query(
+        "UPDATE users SET name=?, email=? is_Active=? WHERE id=?",
+        [name, email, id, is_Active],
+      );
+    } else {
+      const [user] = await pool.query(
+        "UPDATE users SET name=?, email=?, password=? is_Active=? WHERE id=?",
+        [name, email, password, id, is_Active],
+      );
+    }
 
     return res.status(200).json({
       status: true,
       message: "Update user success",
       data: { id, name, email },
     });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+    });
+  }
 };
+
+// DELETE USER
 
 export const deleteUser = async (req, res) => {
   try {

@@ -21,6 +21,7 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Button } from "../components/ui/button";
+import api from "../services/api.js"
 
 export default function Login() {
   const navigate = useNavigate();
@@ -45,28 +46,28 @@ export default function Login() {
     e.preventDefault();
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-      const result = await res.json();
-      if (!res.ok) {
-        throw new Error(
-          result.message || "Please check your email and password",
-        );
-      }
-      localStorage.setItem("", result.data.token);
+      const res = await api.post("/auth/login", formData);
+      console.log(res.data.token)
+
+      localStorage.setItem("token", res.data.token);
+      // "data" pertama dari axios, "data" yg kedua dari BE
       setTimeout(() => {
         setIsLoading(false);
         navigate("/dashboard");
       }, 0);
     } catch (error) {
-      console.log(error.message);
-      setErrorMsg(error.message);
+      const status = error.response?.status;
+      if (status === 401) {
+        setErrorMsg("Incorrect Email or Password.")
+      } else if (status === 400) {
+        setErrorMsg ("Please fill in your email and password.")
+      } else {
+        setErrorMsg ("Something went wrong.Please try again.")
+      }
+
+
+
+
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +90,7 @@ export default function Login() {
           <Card className="shadow-lg border-border p-6">
             <CardHeader className="space-y-1 pb-4">
               <CardTitle className="text-lg font-semibold">
-                Sign In Your Account
+                Sign In To Your Account
               </CardTitle>
               <CardDescription>Enter Your Credentials</CardDescription>
 

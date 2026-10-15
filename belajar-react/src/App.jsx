@@ -5,6 +5,8 @@ import MainLayout from "./pages/MainLayout";
 import ListUser from "./pages/user/List";
 // import Products from "./pages/Products/Products"
 import ListProduct from "./pages/Products/Products";
+import ListTransaction from "./pages/transaction/List"
+
 
 function App() {
   return (
@@ -16,6 +18,7 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/user" element={<ListUser />}></Route>
+          <Route path="/transaction" element={<ListTransaction />}></Route>
           <Route path="/products" element={<ListProduct />}></Route>
         </Route>
       </Routes>

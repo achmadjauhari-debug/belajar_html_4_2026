@@ -21,14 +21,11 @@ const AppModal = ({
   title,
 }) => {
   return (
-    <Dialog open={show} openChange={onClose}>
+    <Dialog open={show} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[540px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
-          <DialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
-          </DialogDescription>
+          <DialogDescription>Description</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={onSubmit}>

@@ -1,0 +1,195 @@
+import { AlertCircleIcon } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardAction,
+} from "../components/ui/card";
+import {
+  Alert,
+  AlertAction,
+  AlertDescription,
+  AlertTitle,
+} from "@/components/ui/alert";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import { Button } from "../components/ui/button";
+import api from "../services/api.js";
+import logo from "@/assets/CreatorHub.jpg"
+
+export default function Login() {
+  const navigate = useNavigate();
+  const _initialForm = { email: "", password: "" };
+  const [formData, setFormData] = useState(_initialForm);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      const res = await api.post("/auth/login", formData);
+      console.log(res.data.token);
+
+      localStorage.setItem("token", res.data.token);
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate("/dashboard");
+      }, 0);
+    } catch (error) {
+      const status = error.response?.status;
+      if (status === 401) {
+        setErrorMsg("Incorrect Email or Password.");
+      } else if (status === 400) {
+        setErrorMsg("Please fill in your email and password.");
+      } else {
+        setErrorMsg("Something went wrong.Please try again.");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Container
+  return (
+    <>
+      <div className="flex min-h-screen justify-center bg-muted/40 p-4">
+        <div className="w-full max-w-md">
+          <div className="mb-6 flex flex-col items-center">
+           
+              <img src={logo} alt="App Logo" className="mb-4 h-28 w-auto rounded-2xl object-contain shadow" />
+            
+            <h1 className="text-2xl font-bold tracking-tight">
+              Content Creator & Pipeline Tracker
+            </h1>
+            <p className="text-sm text-muted-foreground">Junior Web Developer</p>
+          </div>
+          <Card className="shadow-lg border-border p-6">
+            <CardHeader className="space-y-1 pb-4">
+              <CardTitle className="text-lg font-semibold">
+                Sign In To Your Account
+              </CardTitle>
+              <CardDescription>Enter Your Credentials</CardDescription>
+
+              {/* <Alert variant="destructive" className="max-w-md">
+                <AlertCircleIcon />
+                <AlertTitle>{errorMsg}</AlertTitle>
+              </Alert> */}
+
+              {errorMsg && (
+                <p className="text-red-900 flex items-center gap-2">
+                  <AlertCircleIcon /> {errorMsg}
+                </p>
+              )}
+
+              <CardAction>
+                <Button variant="link">Sign Up</Button>
+              </CardAction>
+            </CardHeader>
+            <form onSubmit={handleLogin}>
+              <CardContent className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Enter Your Email"
+                    required
+                    autofocus
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Password</Label>
+                  <Input
+                    id="password"
+                    name="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder="Enter Your Password"
+                    required
+                  />
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </a>
+                </div>
+              </CardContent>
+              <CardFooter className="flex flex-col gap-3 pt-3">
+                <Button type="submit" className="w-full">
+                  Sign In
+                </Button>
+                <Button variant="outline" className="w-full">
+                  Login with Google
+                </Button>
+              </CardFooter>
+            </form>
+          </Card>
+        </div>
+        {/* <Container className="d-flex align-items-center justify-content-center min-vh-100">
+        untuk ngecek
+        <p>Email : {formData.email} </p>
+        <p>Password : {formData.password}</p>
+
+        <div className="w-100 d-flex align-items-center justify-content-center">
+          <Card className="shadow" style={{ width: "400px" }}>
+            <Card.Body className="p-4">
+              <h2 className="font-weight-bold text-center mb-4">Login Form</h2>
+
+              <Form>
+                <Form.Group className="mb-3">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    type="email"
+                    required
+                    placeholder="your.name@email.com"
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group className="mb-3">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    type="password"
+                    required
+                  ></Form.Control>
+                </Form.Group>
+
+                <Form.Group>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="w-100"
+                    onClick={handleLogin}
+                  >
+                    {isLoading ? "Loading..." : "Sign In"}
+                  </Button>
+                </Form.Group>
+              </Form>
+            </Card.Body>
+          </Card>
+        </div>
+      </Container> */}
+      </div>
+    </>
+  );
+}

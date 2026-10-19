@@ -3,8 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import MainLayout from "./pages/MainLayout";
 import ListUser from "./pages/user/List";
-// import Products from "./pages/Products/Products"
-import ListProduct from "./pages/Products/Products";
+import CategoryPage from "./pages/category/listCategory"
+import ProductPage from "./pages/products/listProducts";
 import ListTransaction from "./pages/transaction/List"
 
 
@@ -18,8 +18,9 @@ function App() {
         <Route element={<MainLayout />}>
           <Route path="/dashboard" element={<Dashboard />}></Route>
           <Route path="/user" element={<ListUser />}></Route>
+          <Route path="/category" element={<CategoryPage />}></Route>
           <Route path="/transaction" element={<ListTransaction />}></Route>
-          <Route path="/products" element={<ListProduct />}></Route>
+          <Route path="/product" element={<ProductPage />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

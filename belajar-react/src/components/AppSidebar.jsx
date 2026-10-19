@@ -1,10 +1,12 @@
 import {
   Home,
   Inbox,
-  Calendar,
+  File,
+  FileArchive,
   Search,
   Settings,
   User2,
+  Users,
   ChevronUp,
 } from "lucide-react";
 
@@ -24,9 +26,9 @@ import {
 // Menu navigasi utama
 const items = [
   { title: "Home", url: "#", icon: Home },
-  { title: "Inbox", url: "#", icon: Inbox },
-  { title: "Calendar", url: "#", icon: Calendar },
-  { title: "Search", url: "#", icon: Search },
+  { title: "Product", url: "/product", icon: FileArchive },
+  { title: "Category", url: "/category", icon: File },
+  { title: "Users", url: "/user", icon: Users },
   { title: "Settings", url: "#", icon: Settings },
   { title: "Logout", url: "#", icon: Settings },
 ];

@@ -145,61 +145,64 @@ const ProductPage = () => {
 
   return (
     <>
-      <Card className="shadow-sm border-border p-4">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <div>
-            <CardTitle className="text-xl font-bold">Product List</CardTitle>
-          </div>
-          <Button variant="outline" onClick={handleOpenModal}>
+      <Card className="max-w-5xl w-full shadow-sm border-border p-6 bg-white rounded-lg">
+        {/* Adjusted header layout to match side-by-side positioning */}
+        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-6">
+          <CardTitle className="text-2xl font-bold text-slate-900">Product List</CardTitle>
+          <Button className="border-slate-300 font-medium" onClick={handleOpenModal}>
             Create New Product
           </Button>
         </CardHeader>
+        
         <CardContent className="p-0">
+          {/* Changed width to w-full to fill out the container */}
           <Table className="w-full text-left text-sm">
-            <TableHeader className="border-y bg-muted/30 text-xs uppercase text-muted-foreground">
-              <TableRow>
-                <TableHead className="px-6 py-3 font-medium">#</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Name</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Category</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Price</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Stock</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Status</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Action</TableHead>
+            <TableHeader className="border-b bg-transparent text-xs font-bold uppercase text-slate-500 tracking-wider">
+              <TableRow className="hover:bg-transparent">
+                <TableHead className="px-6 py-4 font-bold text-center w-16">#</TableHead>
+                <TableHead className="px-6 py-4 font-bold">Name</TableHead>
+                <TableHead className="px-6 py-4 font-bold">Category</TableHead>
+                <TableHead className="px-6 py-4 font-bold">Price</TableHead>
+                <TableHead className="px-6 py-4 font-bold">Stock</TableHead>
+                <TableHead className="px-6 py-4 font-bold">Status</TableHead>
+                <TableHead className="px-6 py-4 font-bold text-center">Action</TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="divide-y divide-border">
+            <TableBody className="divide-y divide-slate-100">
               {products.length > 0 ? (
                 products.map((row, index) => (
-                  <TableRow key={row.id || index} className="hover:bg-muted/50 transition-colors">
-                    <TableCell className="px-4 py-6 whitespace-nowrap">{index + 1}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.category_name}</TableCell>
-                    <TableCell>{row.price}</TableCell>
-                    <TableCell>{row.stock}</TableCell>
-                    <TableCell>{row.is_active ? "Active" : "Inactive"}</TableCell>
-                    <TableCell className="px-4 py-6 text-right whitespace-nowrap">
-                      <Button
-                        onClick={() => handleEditModal(row)}
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full me-2"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => handleDelete(row.id)}
-                        variant="destructive"
-                        size="sm"
-                        className="rounded-full me-2"
-                      >
-                        Delete
-                      </Button>
+                  <TableRow key={row.id || index} className="hover:bg-slate-50/50 transition-colors">
+                    <TableCell className="px-6 py-6 text-center text-slate-600">{index + 1}</TableCell>
+                    <TableCell className="px-6 py-6 font-medium text-slate-800">{row.name}</TableCell>
+                    <TableCell className="px-6 py-6 text-slate-600">{row.category_name}</TableCell>
+                    <TableCell className="px-6 py-6 text-slate-600">{row.price}</TableCell>
+                    <TableCell className="px-6 py-6 text-slate-600">{row.stock}</TableCell>
+                    <TableCell className="px-6 py-6 text-slate-600">{row.is_active ? "Active" : "Inactive"}</TableCell>
+                    <TableCell className="px-6 py-6 whitespace-nowrap text-center">
+                      <div className="flex items-center justify-center gap-3">
+                        <Button
+                          onClick={() => handleEditModal(row)}
+                          variant="outline"
+                          size="sm"
+                          className="px-4 py-1 h-8 border-slate-300 font-medium text-slate-700 hover:bg-slate-100"
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          onClick={() => handleDelete(row.id)}
+                          variant="ghost"
+                          size="sm"
+                          className="px-4 py-1 h-8 bg-red-50 text-red-500 font-medium border border-transparent hover:bg-red-100 hover:text-red-600"
+                        >
+                          Delete
+                        </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={7} className="text-center py-4 text-muted">
+                  <TableCell colSpan={7} className="text-center py-8 text-slate-400">
                     Belum ada data produk
                   </TableCell>
                 </TableRow>
@@ -208,6 +211,9 @@ const ProductPage = () => {
           </Table>
         </CardContent>
       </Card>
+
+      {/* AppModal markup continues normally below... */}
+
 
       <AppModal
         show={showModal}

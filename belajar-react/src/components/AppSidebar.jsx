@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom"
 import {
   Home,
   Inbox,
   File,
   FileArchive,
+  ShoppingBasket,
   Search,
   Settings,
   User2,
@@ -23,9 +25,11 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 
+
 // Menu navigasi utama
 const items = [
   { title: "Home", url: "#", icon: Home },
+  { title: "Order", url: "/transaction", icon: ShoppingBasket },
   { title: "Product", url: "/product", icon: FileArchive },
   { title: "Category", url: "/category", icon: File },
   { title: "Users", url: "/user", icon: Users },
@@ -59,7 +63,7 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     tooltip={item.title}
-                    render={<a href={item.url} />}
+                    render={<Link to ={item.url} />}
                   >
                     <item.icon />
                     <span>{item.title}</span>

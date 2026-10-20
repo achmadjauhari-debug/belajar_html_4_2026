@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   Card,
@@ -23,36 +24,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-// const datatransactions = [
-//   {
-//     id: 1,
-//     name: "Reza",
-//     email: "ribrahim50@gmail.com",
-//     password: 12345678,
-//     status: "Active",
-//     action: "",
-//   },
-//   {
-//     id: 2,
-//     name: "Budi",
-//     email: "budi@gmail.com",
-//     password: 12345678,
-//     status: "Active",
-//     action: "",
-//   },
-//   {
-//     id: 3,
-//     name: "ani",
-//     email: "ani@gmail.com",
-//     password: 12345678,
-//     status: "Active",
-//     action: "",
-//   },
-// ];
 import api from "@/services/api.js";
 
-
 const ListTransaction = () => {
+  const navigate = useNavigate();
   const _initForm = {
     id: null,
     name: "",
@@ -66,7 +41,7 @@ const ListTransaction = () => {
   const [formData, setFormData] = useState(_initForm);
   const [isEdit, setIsEdit] = useState(false);
 
-// GETALLUSER
+  // GETALLUSER
   const fetchTransaction = async () => {
     try {
       const response = await api.get("/transaction");
@@ -92,7 +67,7 @@ const ListTransaction = () => {
     setFormData({
       ...user,
       password: "",
-      is_Active: user.is_Active ? "1" : "0"
+      is_Active: user.is_Active ? "1" : "0",
     });
   };
 
@@ -119,22 +94,12 @@ const ListTransaction = () => {
         is_Active: parseInt(formData.is_Active, 10),
       };
 
+      // UPDATE
       if (isEdit) {
         // update data
         await api.put(`/user/${formData.id}`, payload);
-
-        // setTransactions(
-        //   transactions.map((user) => (user.id === formData.id ? formData : user)),
-        // );
       } else {
         await api.post("/user", payload);
-
-        // const newUser = {
-        //   ...formData,
-        //   id: Date.now(),
-        // };
-
-        // setTransactions([...transactions, newUser]);
       }
       setFormData(_initForm);
     } catch (error) {
@@ -164,23 +129,35 @@ const ListTransaction = () => {
 
   return (
     <>
-      <Card className="shadow-sm border-border p-4">
+      <Card className="max-w-5xl w-full shadow-sm border-border p-6 bg-white rounded-lg">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <div>
-            <CardTitle className="text-xl font-bold">Transaction List</CardTitle>
+            <CardTitle className="text-2xl font-bold">
+              Transaction List
+            </CardTitle>
           </div>
-          <Button variant="outline" onClick={handleOpenModal}>
-            Create New Transaction
+          <Button onClick={() => navigate("/transaction/create")}>
+            New Transaction
           </Button>
         </CardHeader>
+
         <CardContent className="p-0">
           <Table className="w-full text-left text-sm">
-            <TableHeader className="border-y bg-muted/30 text-xs uppercase text-muted-foreground">
+            <TableHeader className="border-b bg-transparent text-xs font-bold uppercase text-slate-500 tracking-wider">
               <TableRow>
-                <TableHead className="px-6 py-3 font-medium">#</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Order Number</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Payment Method</TableHead>
-                <TableHead className="px-6 py-3 font-medium">Products</TableHead>
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">#</TableHead>
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                  Order Number
+                </TableHead>
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                  Payment Method
+                </TableHead>
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                  Products
+                </TableHead>
+                <TableHead className="font-medium text-slate-800 text-centerpx-4 py-4">
+                  Action
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-border">
@@ -194,25 +171,19 @@ const ListTransaction = () => {
                       {index + 1}
                     </TableCell>
                     <TableCell>{user.order_number}</TableCell>
-                    <TableCell>{user.payment_method === 1 ? "GOPAY" : "CASH"}</TableCell>
+                    <TableCell>
+                      {user.payment_method === 1 ? "GOPAY" : "CASH"}
+                    </TableCell>
                     <TableCell>
                       <ul>
-                    {user.items.map((item) => (
-                        <li key={item.id}>{item.name}</li>
-                      ))}
+                        {user.items.map((item, idx) => (
+                          <li key={`${item.id || idx}-${idx}`}>{item.name}</li>
+                        ))}
                       </ul>
-
                     </TableCell>
 
-                    {/* <TableCell>
-                      <span
-                        className={`border rounded-sm p-2 ${user.is_Active ? "bg-green-600" : "bg-red-600"} text-white`}
-                      >
-                        {user.is_Active ? "Active" : "InActive"}
-                      </span>
-                    </TableCell> */}
-
-                    <TableCell className="px-4 py-6 text-right whitespace-nowrap">
+                    <TableCell className="px-6 py-6 whitespace-nowrap text-center">
+                      <div className="flex items-center justify-center gap-3">
                       <Button
                         onClick={() => handleEditModal(user)}
                         variant="outline"
@@ -229,6 +200,7 @@ const ListTransaction = () => {
                       >
                         Delete
                       </Button>
+                      </div>
                     </TableCell>
                   </TableRow>
                 ))
@@ -297,12 +269,9 @@ const ListTransaction = () => {
                 <RadioGroup
                   value={formData.is_Active}
                   onValueChange={(value) => {
-                    console.log("radio clicked:", value)
-                    setFormData((prev) => ({ ...prev, is_Active: value}))
+                    console.log("radio clicked:", value);
+                    setFormData((prev) => ({ ...prev, is_Active: value }));
                   }}
-
-                  
-                
                 >
                   <div className="flex items-center gap-3">
                     <RadioGroupItem value="1" id="status-active" />

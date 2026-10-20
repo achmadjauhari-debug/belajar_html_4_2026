@@ -23,7 +23,7 @@ export const login = async (req, res) => {
     // 200: success
 
     // jika email kosong atau password kosong
-    res.status(400).json({
+    return res.status(400).json({
       status: false,
       message: "Email atau Password required",
     });

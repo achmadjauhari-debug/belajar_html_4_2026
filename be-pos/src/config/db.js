@@ -16,11 +16,19 @@ const pool = mysql.createPool({
 });
 
 try {
-  const connection = await pool.getConnection;
-  console.log("Database connection success");
+  const connection = await pool.getConnection();
+  console.log("✅ Database connection success via MySQL2 Pool!");
   connection.release();
 } catch (error) {
-  console.log("connection failed", error.message);
+  console.log("❌ Connection failed:", error.message);
 }
 
 export default pool;
+
+// import { PrismaClient } from "./generated/prisma/index.js";
+
+// const prisma = new PrismaClient({
+//   log: ["query", "info", "warn", "error"],
+// });
+
+// export default prisma;

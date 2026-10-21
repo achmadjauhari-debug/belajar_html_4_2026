@@ -61,18 +61,33 @@ export const createTransaction = async (req, res) => {
     if (Number(payment_method) === 1) {
       const parameter = {
         // cari di docnya midtrans
+        
         transaction_details: {
-          order_id: orderNumber,
-          gross_amount: subtotal,
+          // 🟩 TAMBAHKAN `-${Date.now()}` agar nomor order_id selalu unik dan tidak pernah bentrok di Midtrans
+          order_id: `${orderNumber}-${Date.now()}`, 
+          gross_amount: Number(total),
         },
-        enable_payments: ["gopay"],
-        item_details: items.map((item) => ({
-          id: item.product_id,
-          price: item.price,
-          quantity: item.qty,
-          name: `Product ID ${item.product_id}`,
-        })),
+        callbacks: {
+          finish: "http://localhost:5173/transaction/print",
+        },
+
+        enable_payments: ["gopay", "qris"],
+        item_details: [
+          ...items.map((item) => ({
+            id: String(item.product_id),
+            price: Number(item.price),
+            quantity: Number(item.qty),
+            name: `Product ID ${item.product_id}`,
+          })),
+          {
+            id: "TAX-10",
+            price: Number(tax), // 🟩 Masukkan Pajak sebagai item terpisah agar hitungan item_details MATCH dengan gross_amount (total)
+            quantity: 1,
+            name: "Tax (10%)",
+          },
+        ],
       };
+      console.log("Parameter dikirim ke midtrans snap :", JSON.stringify(parameter, null, 2))
       midtransResponse = await snap.createTransaction(parameter);
     }
     await connection.commit();
@@ -114,7 +129,8 @@ export const getAllTransaction = async (req, res) => {
     const [rows] = await pool.query(`SELECT
         orders.id,
         orders.order_number,
-        orders.payment_method, 
+        orders.payment_method,
+        orders.total, 
         order_details.product_id,
         products.name
         FROM orders
@@ -128,6 +144,7 @@ export const getAllTransaction = async (req, res) => {
           id: row.id,
           order_number: row.order_number,
           payment_method: row.payment_method,
+          total: row.total,
           items: [],
         };
       }
@@ -184,4 +201,21 @@ const generateOrderNumber = async (connection) => {
 
   // Menghasilkan format akhir seperti: TR-20261019-0001
   return `${prefix}${String(nextNumber).padStart(4, "0")}`;
+};
+
+export const deleteTransaction = async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    await pool.query("DELETE FROM orders WHERE id=?", [id]);
+    return res.status(200).json({
+      status: true,
+      message: "Delete is Success",
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+    });
+  }
 };

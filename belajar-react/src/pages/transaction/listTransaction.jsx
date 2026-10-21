@@ -41,7 +41,7 @@ const ListTransaction = () => {
   const [formData, setFormData] = useState(_initForm);
   const [isEdit, setIsEdit] = useState(false);
 
-  // GETALLUSER
+  // GET ALL TRANSACTION
   const fetchTransaction = async () => {
     try {
       const response = await api.get("/transaction");
@@ -82,49 +82,24 @@ const ListTransaction = () => {
     });
   };
 
-  // HANDLE SUBMIT
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const payload = {
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-        is_Active: parseInt(formData.is_Active, 10),
-      };
-
-      // UPDATE
-      if (isEdit) {
-        // update data
-        await api.put(`/user/${formData.id}`, payload);
-      } else {
-        await api.post("/user", payload);
-      }
-      setFormData(_initForm);
-    } catch (error) {
-      const errMsg = error.message;
-      console.log(errMsg);
-    } finally {
-      fetchTransaction();
-      setShowModal(false);
-    }
-
-    // jika edit data
-  };
-
-  // DELETE USER
+  // DELETE TRANSACTION
 
   const handleDelete = async (id) => {
-    const confirmation = window.confirm(
-      "Are you sure want to delete this data?",
-    );
-    if (confirmation) {
-      // setTransactions(transactions.filter((u) => u.id !== id));
-      await api.delete(`/user/${id}`);
+    // Konfirmasi sebelum menghapus (opsional tapi disarankan)
+    if (!window.confirm("Apakah Anda yakin ingin menghapus data ini?")) return;
+
+    try {
+      // Menembak API delete berdasarkan ID
+      await api.delete(`/transaction/${id}`);
+
+      // Refresh data setelah berhasil dihapus
       fetchTransaction();
+
+      alert("Data berhasil dihapus");
+    } catch (error) {
+      console.error("Gagal menghapus data:", error.message);
+      alert("Somwthing wrong during remove data");
     }
-    // filter: transactions
   };
 
   return (
@@ -145,61 +120,72 @@ const ListTransaction = () => {
           <Table className="w-full text-left text-sm">
             <TableHeader className="border-b bg-transparent text-xs font-bold uppercase text-slate-500 tracking-wider">
               <TableRow>
-                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">#</TableHead>
                 <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                  #
+                </TableHead>
+                <TableHead className="font-medium text-slate-800 text-left px-4 py-4">
                   Order Number
                 </TableHead>
-                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                <TableHead className="font-medium text-slate-800 text-left px-4 py-4">
                   Payment Method
                 </TableHead>
-                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                <TableHead className="font-medium text-slate-800 text-left px-4 py-4">
                   Products
                 </TableHead>
-                <TableHead className="font-medium text-slate-800 text-centerpx-4 py-4">
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
+                  Total Transaction
+                </TableHead>
+                <TableHead className="font-medium text-slate-800 text-center px-4 py-4">
                   Action
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-border">
               {transactions.length > 0 ? (
-                transactions.map((user, index) => (
+                transactions.map((transaction, index) => (
                   <TableRow
                     key={index}
                     className="hover:bg-muted/50 transition-colors"
                   >
+                    {/* 1. Counter */}
                     <TableCell className="px-4 py-6 whitespace-nowrap">
                       {index + 1}
                     </TableCell>
-                    <TableCell>{user.order_number}</TableCell>
+                    {/* 2. Order Number */}
+                    <TableCell>{transaction.order_number}</TableCell>
+                    {/* 3. Payment Method */}
                     <TableCell>
-                      {user.payment_method === 1 ? "GOPAY" : "CASH"}
+                      {transaction.payment_method === 1 ? "GOPAY" : "CASH"}{" "}
                     </TableCell>
+                    {/* 4. Products */}
                     <TableCell>
                       <ul>
-                        {user.items.map((item, idx) => (
+                        {transaction.items.map((item, idx) => (
                           <li key={`${item.id || idx}-${idx}`}>{item.name}</li>
                         ))}
                       </ul>
                     </TableCell>
-
+                    {/* 5. Total Transaction Value */}
+                    <TableCell className="px-4 py-6 whitespace-nowrap text-center font-semibold">
+                      {transaction.total !=null ? (
+                      Number(transaction.total).toLocaleString("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                        maximumFractionDigits: 0,
+                      })
+                      ) : ( "Rp 0")}
+                    </TableCell>
+                    {/* 6. Delete button */}
                     <TableCell className="px-6 py-6 whitespace-nowrap text-center">
                       <div className="flex items-center justify-center gap-3">
-                      <Button
-                        onClick={() => handleEditModal(user)}
-                        variant="outline"
-                        size="sm"
-                        className="rounded-full me-2"
-                      >
-                        Edit
-                      </Button>
-                      <Button
-                        onClick={() => handleDelete(user.id)}
-                        variant="destructive"
-                        size="sm"
-                        className="rounded-full me-2"
-                      >
-                        Delete
-                      </Button>
+                        <Button
+                          onClick={() => handleDelete(transaction.id)}
+                          variant="destructive"
+                          size="sm"
+                          className="rounded-full me-2"
+                        >
+                          Delete
+                        </Button>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -207,7 +193,7 @@ const ListTransaction = () => {
               ) : (
                 <TableRow>
                   <TableCell
-                    colSpan={5}
+                    colSpan={6}
                     className="text-center py-4 text-muted"
                   >
                     Belum ada data user
@@ -218,75 +204,6 @@ const ListTransaction = () => {
           </Table>
         </CardContent>
       </Card>
-
-      <AppModal
-        show={showModal}
-        onClose={handleCloseModal}
-        title={isEdit ? "Edit User" : "Create New User"}
-        onSubmit={handleSubmit}
-        submitLabel={isEdit ? "Save Change" : "Save"}
-      >
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Name</Label>
-            <Input
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-              placeholder="Enter your name"
-            ></Input>
-          </div>
-          <div className="space-y-2">
-            <Label>Email</Label>
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              required
-              placeholder="Enter your email"
-            ></Input>
-          </div>
-          <div className="space-y-2">
-            <Label>Password</Label>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              required={isEdit ? false : true}
-              placeholder="Enter your password"
-            ></Input>
-
-            {/* acticvation */}
-            {isEdit && (
-              <div className="space-y-2">
-                <Label>Set Active</Label>
-                <RadioGroup
-                  value={formData.is_Active}
-                  onValueChange={(value) => {
-                    console.log("radio clicked:", value);
-                    setFormData((prev) => ({ ...prev, is_Active: value }));
-                  }}
-                >
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="1" id="status-active" />
-                    <Label htmlFor="status-active">Active</Label>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <RadioGroupItem value="0" id="status-inactive" />
-                    <Label htmlFor="status-inactive">Not Active</Label>
-                  </div>
-                </RadioGroup>
-              </div>
-            )}
-          </div>
-        </div>
-      </AppModal>
     </>
   );
 };

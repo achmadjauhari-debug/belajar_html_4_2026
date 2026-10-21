@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardContent,
@@ -19,17 +20,8 @@ import {
 } from "@/components/ui/select";
 
 const FormTransaction = () => {
-  const _initForm = {
-    id: null,
-    name: "",
-    email: "",
-    password: "",
-    is_Active: "1",
-  };
-
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
-  const [formData, setFormData] = useState(_initForm);
-  const [isEdit, setIsEdit] = useState(false);
   const [cart, setCart] = useState([]);
   const [paymentMethod, setPaymentMethod] = useState("CASH");
   const [cashAmount, setCashAmount] = useState("");
@@ -70,19 +62,20 @@ const FormTransaction = () => {
 
   const updateQty = (id, qty) => {
     setCart((prev) => {
-      return prev.map((item) => {
-        if (item.id === id) {
-          const nextQty = item.qty + qty;
-          return nextQty > 0 && nextQty <= item.stock
-            ? { ...item, qty: nextQty }
-            : item;
-        }
-        return item;
-      })
-      .filter((item) => item.qty > 0);
+      return prev
+        .map((item) => {
+          if (item.id === id) {
+            const nextQty = item.qty + qty;
+            return nextQty > 0 && nextQty <= item.stock
+              ? { ...item, qty: nextQty }
+              : item;
+          }
+          return item;
+        })
+        .filter((item) => item.qty > 0);
     });
   };
-  console.log ("cart",cart)
+  console.log("cart", cart);
 
   const handleChange = (e) => {
     setFormData({
@@ -128,6 +121,60 @@ const FormTransaction = () => {
     if (confirmation) {
       await api.delete(`/user/${id}`);
       fetchTransaction();
+    }
+  };
+
+  const TAX_RATE = 0.1;
+  const totalAmount = cart.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0,
+  );
+  //acc= accumulator
+  const tax = Math.round(totalAmount * TAX_RATE);
+  const total = totalAmount + tax;
+
+  // Hitung kembalian jika menggunakan CASH, jika tidak isi dengan 0
+  const change = paymentMethod === "CASH" ? Number(cashAmount) - total : 0;
+
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+      const payload = {
+        order_number: Date.now(),
+        payment_method: paymentMethod === "CASH" ? 2 : 1,
+        items: cart.map((item) => ({
+          product_id: item.id,
+          qty: item.qty,
+          price: item.price,
+        })),
+        subtotal: totalAmount,
+        pay: paymentMethod === "CASH" ? cashAmount : total, // Jika QRIS langsung bayar pas sesuai total
+        tax: tax,
+        total: total,
+      };
+
+      console.log(payload)
+
+      const response = await api.post("/transaction", payload);
+      console.log(response)
+    
+      if (!response.status) {
+        alert(response.message || "Failed process transaction");
+        return;
+      }
+
+      if (
+        (paymentMethod === "QRIS" && response.payment_gateway?.redirect_url)
+      ) {
+        window.location.href = response.payment_gateway.redirect_url;
+        return;
+      }
+
+      navigate("/transaction/print");
+    } catch (error) {
+      console.log("error transaction order", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -208,7 +255,8 @@ const FormTransaction = () => {
                       </div>
                     </div>
                     <div className="flex items-center gap-1.5 pt-3">
-                      <Button onClick={() => updateQty(item.id, -1)}
+                      <Button
+                        onClick={() => updateQty(item.id, -1)}
                         variant="outline"
                         size="sm"
                         className="h-6 w-6 p-0 text-xs"
@@ -218,7 +266,8 @@ const FormTransaction = () => {
                       <span className="w-6 text-center text-xs font-mono font-medium">
                         {item.qty}
                       </span>
-                      <Button onClick={() => updateQty(item.id, 1)}
+                      <Button
+                        onClick={() => updateQty(item.id, 1)}
                         variant="outline"
                         size="sm"
                         className="h-6 w-6 p-0 text-xs"
@@ -239,7 +288,10 @@ const FormTransaction = () => {
 
                 <div className="space-y-1">
                   <Label className="text-sm">Payment Method</Label>
-                  <Select value={paymentMethod} onValueChange={setPaymentMethod}>
+                  <Select
+                    value={paymentMethod}
+                    onValueChange={setPaymentMethod}
+                  >
                     <SelectTrigger id="payment" className="h-8 text-xs w-full">
                       <SelectValue placeholder="Select One" />
                     </SelectTrigger>
@@ -250,35 +302,68 @@ const FormTransaction = () => {
                   </Select>
                 </div>
                 {paymentMethod === "CASH" && (
-
-                <div className="space-y-1">
-                  <Label className="text-xs">Pay</Label>
-                  <Input
-                    className="h-8 text-xs"
-                    id="cash"
-                    type="number"
-                    placeholder="Enter the cash value"
-                    size="sm"
-                    value={cashAmount}
-                    onChange={(e) => setCashAmount(e.target.value)}
-                  ></Input>
-                </div>
+                  <div className="space-y-1">
+                    <Label className="text-xs">Pay</Label>
+                    <Input
+                      className="h-8 text-xs"
+                      id="cash"
+                      type="number"
+                      placeholder="Enter the cash value"
+                      size="sm"
+                      value={cashAmount}
+                      onChange={(e) => setCashAmount(e.target.value)}
+                    ></Input>
+                  </div>
                 )}
 
-
-
+                <div className="flex justify-between font-semibold text-sm">
+                  <span>Subtotal</span>
+                  <span>
+                    {Number(totalAmount).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
+                </div>
+                <div className="flex justify-between font-semibold text-sm">
+                  <span>Tax (10%)</span>
+                  <span>
+                    {Number(tax).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
+                </div>
                 <div className="flex justify-between font-semibold text-sm">
                   <span>Total</span>
-                  <span>Rp.100.000</span>
+                  <span>
+                    {Number(total).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
                 </div>
                 <div className="flex justify-between text-muted-foreground">
                   <span>Change</span>
-                  <span>Rp.100.000</span>
+                  <span>
+                    {" "}
+                    {Number(change).toLocaleString("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                      maximumFractionDigits: 0,
+                    })}
+                  </span>
                 </div>
               </div>
             </CardContent>
             <CardFooter className="p-4 border-t">
-              <Button className="w-full text-xs font-semibold">
+              <Button
+                onClick={handleCheckout}
+                className="w-full text-xs font-semibold"
+              >
                 {loading ? "Loading..." : "Save Transaction"}
               </Button>
             </CardFooter>

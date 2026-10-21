@@ -7,6 +7,7 @@ import CategoryPage from "./pages/category/listCategory"
 import ProductPage from "./pages/products/listProduct";
 import ListTransaction from "./pages/transaction/listTransaction"
 import FormTransaction from "./pages/transaction/formTransaction";
+import PrintTransaction from "@/pages/transaction/Print"
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/category" element={<CategoryPage />}></Route>
           <Route path="/transaction" element={<ListTransaction />}></Route>
           <Route path="/transaction/create" element={<FormTransaction />}></Route>
+          <Route path="/transaction/print" element={<PrintTransaction />}></Route>
           <Route path="/product" element={<ProductPage />}></Route>
         </Route>
       </Routes>

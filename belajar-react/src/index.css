@@ -60,19 +60,30 @@
 
 /* Buat modifikasi print receipt */
 @media print {
-  body * {
-    visibility: none;
-  }
-  .print\:border-none,
-  .print\:border-none * {
-    visibility: visible
+  @page {
+    size: 80mm auto;   /* 80mm wide, height follows the content */
+    margin: 0;
   }
 
-  .print\:border-none {
+  html,
+  body {
+    width: 80mm;
+    margin: 0;
+    background: white;
+  }
+
+  /* Hide everything except the receipt (sidebar, header, etc.) */
+  body * {
+    visibility: hidden;
+  }
+  #receipt,
+  #receipt * {
+    visibility: visible;
+  }
+  #receipt {
     position: absolute;
-    left:0;
-    top:0;
-    width: 100%;
-    max-width: 80mm;
+    left: 0;
+    top: 0;
+    width: 80mm;
   }
 }

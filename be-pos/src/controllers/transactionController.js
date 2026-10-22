@@ -7,9 +7,10 @@ export const createTransaction = async (req, res) => {
 
   try {
     // 2. 🟩 Jalankan beginTransaction setelah koneksi didapatkan
+
     await connection.beginTransaction();
+
     const {
-      order_number,
       user_id,
       payment_method,
       subtotal,
@@ -41,14 +42,24 @@ export const createTransaction = async (req, res) => {
     }
 
     const orderNumber = await generateOrderNumber(connection);
-    console.log(req.user);
-    console.log("order number", orderNumber);
+    console.log("Order baru berhasil dibuat:", orderNumber);
 
     const [transaction] = await connection.query(
       "INSERT INTO orders (order_number, user_id, payment_method, subtotal, tax, total, pay, status) VALUES (?,?,?,?,?,?,?,?)",
-      [orderNumber, userId, payment_method, subtotal, tax, total, pay, status],
+      [
+        orderNumber,
+        userId,
+        payment_method,
+        subtotal,
+        tax,
+        total,
+        cashReceive,
+        status,
+      ],
     );
+
     const orderId = transaction.insertId;
+
     if (items && items.length) {
       for (const item of items) {
         await connection.query(
@@ -61,10 +72,10 @@ export const createTransaction = async (req, res) => {
     if (Number(payment_method) === 1) {
       const parameter = {
         // cari di docnya midtrans
-        
+
         transaction_details: {
           // 🟩 TAMBAHKAN `-${Date.now()}` agar nomor order_id selalu unik dan tidak pernah bentrok di Midtrans
-          order_id: `${orderNumber}-${Date.now()}`, 
+          order_id: `${orderNumber}-${Date.now()}`,
           gross_amount: Number(total),
         },
         callbacks: {
@@ -87,7 +98,10 @@ export const createTransaction = async (req, res) => {
           },
         ],
       };
-      console.log("Parameter dikirim ke midtrans snap :", JSON.stringify(parameter, null, 2))
+      console.log(
+        "Parameter dikirim ke midtrans snap :",
+        JSON.stringify(parameter, null, 2),
+      );
       midtransResponse = await snap.createTransaction(parameter);
     }
     await connection.commit();
@@ -124,6 +138,7 @@ export const createTransaction = async (req, res) => {
   }
 };
 
+// GET ALL TRANSACTION
 export const getAllTransaction = async (req, res) => {
   try {
     const [rows] = await pool.query(`SELECT
@@ -168,7 +183,113 @@ export const getAllTransaction = async (req, res) => {
   }
 };
 
-//bikin nomor urut
+// GET TRANSACTION BY ID
+export const getTransactionById = async (req, res) => {
+  try {
+    const { id } = req.params; // Ambil parameter dari URL
+    let queryTarget = String(id).trim();
+
+    // 🟩 Debugging: Lihat format ID asli yang dikirim dari React frontend
+    console.log("Nomor Order masuk dari frontend:", queryTarget);
+
+    // 1. 🟩 Pembersihan Timestamp Midtrans Callback (TR-XXXX-XXXX-TIMESTAMP)
+    // Mencari posisi tanda hubung (-) terakhir untuk mendeteksi ID unik panjang dari Midtrans
+    if (queryTarget.includes("-")) {
+      const parts = queryTarget.split("-");
+      // Format order_number dari generateOrderNumber biasanya memiliki 3 bagian: TR - YYYYMMDD - NNNN
+      // Jika digabung dengan timestamp Midtrans, panjang array parts akan menjadi 4 atau lebih.
+      if (parts.length >= 4) {
+        // Ambil kembali bagian nota bersih (Indeks 0, 1, dan 2)
+        queryTarget = `${parts[0]}-${parts[1]}-${parts[2]}`;
+      }
+    }
+    // 2. 🟩 Cek apakah parameter murni Angka (Primary Key ID database) atau String (Order Number)
+    // Menggunakan Number.isInteger untuk menghindari bug penulisan regex yang bocor
+    const isParamNumeric =
+      !isNaN(queryTarget) && Number.isInteger(Number(queryTarget));
+
+    console.log(
+      `Mencari Transaksi berdasarkan Kolom [${isParamNumeric ? "id" : "order_number"}]: "${queryTarget}"`,
+    );
+
+    // 2. Tentukan Query SQL secara dinamis berdasarkan jenis parameter yang masuk
+    const sqlQuery = `
+      SELECT
+        orders.id AS order_id_key,
+        orders.order_number,
+        orders.user_id,
+        orders.payment_method,
+        orders.subtotal,
+        orders.total,
+        orders.tax,
+        orders.pay,
+        orders.status, 
+        orders.created_at,
+        order_details.product_id,
+        order_details.qty,
+        order_details.price,
+        products.name
+      FROM orders
+      LEFT JOIN order_details ON orders.id = order_details.order_id
+      LEFT JOIN products ON order_details.product_id = products.id 
+      WHERE ${isParamNumeric ? "orders.id = ?" : "orders.order_number = ?"}`;
+
+    // 2. 🟩 Jalankan Query ke Database
+    const [rows] = await pool.query(sqlQuery, [queryTarget]);
+
+    // 3. 🟩 Validasi eksistensi baris data array hasil database
+    if (!rows || rows.length === 0)
+      return res.status(404).json({
+        status: false,
+        message: `Transaction data not found for identifier: ${queryTarget}`,
+      });
+
+    // 4. 🟩 Mapping data induk transaksi menggunakan baris indeks pertama [0]
+    const firstRow = rows[0];
+    const transaction = {
+      id: firstRow.order_id_key,
+      order_number: firstRow.order_number,
+      created_at: firstRow.created_at,
+      user_id: firstRow.user_id,
+      payment_method: firstRow.payment_method,
+      subtotal: firstRow.subtotal,
+      total: firstRow.total,
+      tax: firstRow.tax,
+      pay: firstRow.pay,
+      status: firstRow.status,
+      items: [],
+    };
+
+    // 5. 🟩 GABUNGKAN RINCIAN PRODUK BELANJA DARI SELURUH BARIS JOIN DATABASE
+    rows.forEach((row) => {
+      if (row.product_id) {
+        transaction.items.push({
+          product_id: row.product_id,
+          name: row.name,
+          qty: row.qty,
+          price: row.price,
+        });
+      }
+    });
+
+    // 6. 🟩 KIRIM RESPONS SUKSES UTUH KE FRONTEND REACT
+    return res.status(200).json({
+      status: true,
+      message: "Fetch transaction data successful",
+      data: transaction,
+    });
+
+  } catch (error) {
+    console.error("Error di getTransactionById:", error);
+    return res.status(500).json({
+      status: false,
+      message: error.message,
+    });
+  }
+};
+
+
+// GENERATE ORDER NUMBER AUTOMATICALLY
 const generateOrderNumber = async (connection) => {
   // Format target: TR-20261019-
   const now = new Date();

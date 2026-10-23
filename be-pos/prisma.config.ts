@@ -9,6 +9,7 @@ export default defineConfig({
     path: "prisma/migrations",
   },
   datasource: {
-    url: "mysql://root:@localhost:3306/db_point_of_sales_2026_4",
+
+    url: process.env.DATABASE_URL,
   },
 });

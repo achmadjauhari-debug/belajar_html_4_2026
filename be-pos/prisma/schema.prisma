@@ -1,63 +1,24 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "mysql" 
 }
 
-model categories {
-  id       Int        @id @default(autoincrement())
-  name     String?    @unique(map: "categories_unique") @db.VarChar(55)
-  products products[]
-}
+model User {
+  id          Int       @id @default(autoincrement())
+  name        String    @db.VarChar(100)
+  email       String    @unique
+  password    String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
 
-model order_details {
-  id         Int       @id @default(autoincrement())
-  order_id   Int?
-  product_id Int?
-  qty        Int?
-  price      Int?
-  created_at DateTime? @default(now()) @db.Timestamp(0)
-  products   products? @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "order_details_products_FK")
-
-  @@index([product_id], map: "order_details_products_FK")
-}
-
-/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
-model orders {
-  id             Int       @id @default(autoincrement())
-  order_number   String?   @db.VarChar(100)
-  user_id        Int
-  payment_method Int       @default(1) @db.TinyInt
-  subtotal       Int
-  tax            Int?
-  total          Int?
-  created_at     DateTime? @default(now()) @db.Timestamp(0)
-  product_id     Int?
-  pay            Int?
-  status         String?   @db.VarChar(100)
-}
-
-model products {
-  id            Int             @id @default(autoincrement())
-  category_id   Int?
-  name          String          @db.VarChar(55)
-  price         Int
-  stock         Int?
-  description   String          @db.VarChar(255)
-  is_active     Boolean?        @default(true)
-  order_details order_details[]
-  categories    categories?     @relation(fields: [category_id], references: [id], onDelete: Restrict, onUpdate: Restrict, map: "products_categories_FK")
-
-  @@index([category_id], map: "products_categories_FK")
-}
-
-model users {
-  id        Int     @id @default(autoincrement())
-  name      String? @db.VarChar(100)
-  email     String? @db.VarChar(100)
-  password  String? @db.VarChar(100)
-  is_Active String? @default("1") @db.VarChar(100)
+@@map("users")
 }

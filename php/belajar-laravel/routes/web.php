@@ -16,3 +16,13 @@ Route::get('bagi',[BelajarController::class, 'bagi'])->name('bagi');
 route::post('actionBagi', [BelajarController::class, 'actionBagi'])->name('actionBagi');
 Route::get('perkalian',[BelajarController::class, 'kali'])->name('perkalian');;
 route::post('actionKali', [BelajarController::class, 'actionKali'])->name('actionKali');
+
+//prefix
+Route::prefix('admin')->name('admin.')->group(function() {
+    Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login']);
+    Route::post('/actionLogin', [\App\Http\Controllers\LoginController::class, 'actionLogin'])->name('actionLogin');
+    Route::resource('dashboard', \App\Http\Controllers\DashboardController::class);
+    //resource bawaan dari Laravel yg sudah berisi semua method (get,post,put, dll)
+    Route::resource('user', \App\Http\Controllers\UserController::class);
+     
+     });

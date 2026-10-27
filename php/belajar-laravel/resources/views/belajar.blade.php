@@ -19,5 +19,11 @@
 <a href="{{ url()->previous() }}">Kembali</a>
 <br><br>
 
+<main>
+    
+    @yield('content')
+
+</main>
+
 </body>
 </html>

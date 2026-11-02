@@ -50,9 +50,15 @@
         <div class="sidebar-menu-title">Pages</div>
         <ul class="sidebar-menu-list">
           <li class="sidebar-menu-item">
-            <a href="{{route('admin.category.index')}}" class="sidebar-menu-link active" id="menu-blankpage" title="Blank Page">
+            <a href="{{route('admin.category.index')}}" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
               <i class="bi bi-file-earmark"></i>
               <span>Kategori Produk</span>
+            </a>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="{{route('admin.product.index')}}" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
+              <i class="bi bi-file-earmark"></i>
+              <span>Produk</span>
             </a>
           </li>
           <li class="sidebar-menu-item">

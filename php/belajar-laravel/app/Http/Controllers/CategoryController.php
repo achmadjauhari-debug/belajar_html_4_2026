@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -25,7 +26,7 @@ class CategoryController extends Controller
     {
         $title = "Management Kategori Produk || PPKD Sticker";
         $categories = Category::orderBy('sort_order')->get();
-        return view('admin.category.index', compact('title', 'categories'));
+        return view('admin.category.create', compact('title', 'categories'));
     }
 
     /**
@@ -42,10 +43,11 @@ class CategoryController extends Controller
         ]);
 
         //slug digital-marketing
-        $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['slug'] = Str::slug($validated['slug']) ?? $validated['name'];
+        $validated['sort_order'] = $validated['sort_order'] ?? ((Category::max('sort_order') ?? 0) + 1);
+
         Category::create($validated);
-        return redirect()->route('admin.category.create')->with('success', 'Kategori Produk berhasil ditambahkan');
+        return redirect()->route('admin.category.index')->with('success', 'Kategori Produk berhasil ditambahkan');
     }
 
     /**
@@ -68,34 +70,33 @@ class CategoryController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+public function update(Request $request, Category $category)
     {
-             $validated = $request->validate([
-            'name' => 'required|string',
-            'slug' => 'nullable|string|uniqe:categories,slug'.$category->id,
+    $validated = $request->validate([
+            'name'        => 'required|string',
+            'slug'        => ['nullable', 'string', Rule::unique('categories', 'slug')->ignore($category->id)],
             'description' => 'nullable|string',
             'icon'        => 'nullable|string',
-            'sort_order'  => 'nullable|integer',
-        ]);
+            'sort_order'  => 'nullable|integer|min:0',
+    ]);
 
-        //slug digital-marketing
-        $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
-        $validated['sort_order'] = $validated['sort_order'] ?? 0;
+        $validated['slug'] = Str::slug($validated['slug'] ?? $validated['name']);
+        $validated['sort_order'] = $validated['sort_order'] ?? $category->sort_order;
+
         $category->update($validated);
 
-        return redirect()->route('admin.category.index')->with('success', 'Kategori Produk berhasil diperbarui');
-
-        
+        return redirect()->route('admin.category.index')
+            ->with('success', 'Kategori Produk berhasil diperbarui');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Category $category)
+    public function destroy(Category $category)
     {
         $category->delete();
         //Category::find($id)->delete();
         //Category::where('id', $id)->delete();
-        return redirect()->route('admin.category.index')-> with('success', 'Kategori Produk berhasil di delete');
+        return redirect()->route('admin.category.index')-> with('success', 'Kategori Produk berhasil di hapus');
         }  
 }

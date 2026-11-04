@@ -53,9 +53,9 @@
                 <!-- Logo container -->
                 <div class="col-6 col-md-3 col-lg-3">
                     <a class="d-inline-block" href="index.html">
-                        <img alt="PrimaGraphia - Inovasi Cetak Kekinian" class="img-fluid"
-                            src="https://lh3.googleusercontent.com/aida/AEtjO1Xqry6qw2vUQSI9rgWQp5wG9IEWpNyBr_qtSHLs0JUAsLqXh5rlF2X4LRoa0DNt_DAOJoiAa20HFjC1RmkiNObcfUgNZhlveauu5OmOR3WZJi3nfPU5IPy5yiZFKD-NLxwE7ZRGzuuo8a67NDvqKEetINcB4yc10OV_Fc30AlRbnRct0nnBpNw2EJZRG-bGmv3B-Sn0d-lVpe8O2jDVhzYCi5AX782OHW5ros6SNho"
-                            style="max-height: 48px; width: auto;" />
+                        <img alt="Garuda Indonesia - Pancasila" class="img-fluid"
+                            src="{{ asset('assets/images/itikaaf.jpg') }}"
+                            style="max-height: 60px; width: auto;" />
                     </a>
                 </div>
                 <!-- Global Search Bar Form -->
@@ -63,7 +63,7 @@
                     <form class="d-flex align-items-center pg-search-group px-3 py-1" role="search">
                         <i class="bi bi-search text-muted me-2 fs-6"></i>
                         <input aria-label="Search" class="form-control pg-search-input p-0"
-                            placeholder="Cari kartu nama, stiker, banner, box..." type="search" />
+                            placeholder="Cari produk itikaaf..." type="search" />
                         <button aria-label="Tombol Cari"
                             class="btn btn-sm btn-pg-primary rounded-circle ms-2 d-flex align-items-center justify-content-center"
                             style="width: 28px; height: 28px; padding: 0;" type="submit">

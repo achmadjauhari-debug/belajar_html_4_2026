@@ -38,7 +38,7 @@
     </div>
     <div class="mb3">
             <button type="submit" class="btn-custom btn-custom-primary">Simpan</button>
-            <a href="{{url()->previous()}}" class="text-muted">Kembali</a>
+            <a href="{{url()->previous()}}" class="btn-custom btn-custom-secondary">Kembali</a>
     </div>
 </form>
 @endsection

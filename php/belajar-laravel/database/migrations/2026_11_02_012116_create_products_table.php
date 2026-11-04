@@ -16,9 +16,12 @@ return new class extends Migration
             $table->foreignId('category_id')->nullable()->constrained('categories')->onDelete('set null');
             $table->string('image', length: 150)->nullable();
             $table->string('name', length: 55);
-            $table->tinyInteger('stock');
-            $table->Integer('price');
+            $table->string('slug', length: 60)->nullable()->unique();
+            $table->text('brief_description')->nullable();
+            $table->text('description')->nullable();
+            $table->integer('price');
             $table->timestamps();
+            
         });
     }
 

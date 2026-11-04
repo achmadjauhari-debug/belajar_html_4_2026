@@ -6,7 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id', 'image', 'name', 'stock', 'price'];
+    protected $fillable = [
+        'category_id', 
+        'image', 
+        'name', 
+        'slug', 
+        'price',
+        'price_art_cartoon',
+        'price_art_paper',
+        'price_hvs',
+        'price_doft',
+        'price_glossy',
+        'price_cutting',
+        'price_no_cutting',
+        'brief_description',
+        'description'];
 
     //many to one relationship
     public function category(){

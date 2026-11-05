@@ -7,6 +7,8 @@ use App\Models\Product;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -41,7 +43,7 @@ class ProductController extends Controller
     {
         $validated =    $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'image' => 'nullable|image|mimes:png,jpg,jpeg,gif', 
+            // 'image' => 'nullable|image|mimes:png,jpg,jpeg,gif', 
             'name'  => 'required|string|max:60',
             'slug'  => 'nullable|string|max:60|unique:products,slug',
             'price' => 'required|numeric',
@@ -54,9 +56,46 @@ class ProductController extends Controller
             'price_no_cutting' => 'nullable|numeric',
             'brief_description' => 'nullable|string',
             'description' => 'nullable|string',
+
+            //validasi produk image
+            'images'    => 'nullable|array',
+            'images.*'  => 'image|mimes:png,jpg,jpeg,gif,webp|max:2048', // Validasi setiap gambar dalam array
+            'alt'       => 'nullable|array',
+            'alt.*'     => 'nullable|string|max:255', // Validasi setiap alt text dalam array
+            'sort_order' => 'nullable|array',
+            'sort_order.*' => 'nullable|integer', // Validasi setiap sort order dalam array
+
         ]);
         
-     
+        //ada 2 tabel product dan product_images, jadi kita harus menyimpan data ke tabel product terlebih dahulu, baru kemudian menyimpan data ke tabel product_images
+        //transaction untuk menyimpan data ke tabel product dan product_images sekaligus, jika salah satu gagal maka semua akan dibatalkan
+        DB::transaction(function() use ($request, $validated) {
+            $product = Product::create([
+                'category_id'   => $validated['category_id'],             
+                'name'          => $validated['name'],
+            ]);
+
+              if ($request->hasFile('images')) 
+            {
+                $imageData=[];
+
+                foreach ($request->file('images') as $key => $file) {
+                    $path = $file->store('products', 'public');
+               
+
+                    $imageData[] = [
+                        'path' => $path,
+                        'alt' => $request['alt'][$key] ?? $product->name,
+                        'sort_order' => $key + 1, // Default sort order berdasarkan urutan upload
+                    ];
+                }
+                $product->images()->createMany($imageData);
+            }
+    }); 
+            return redirect()->route('admin.product.index')->with('success', 'Produk berhasil ditambahkan');
+    };
+
+
         $imagePath = null;
         if ($request->hasFile('image')) {
             $imagePath = $request->file('image')->store('products', 'public');

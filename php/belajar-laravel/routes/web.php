@@ -2,8 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BelajarController;
+use App\Http\Controllers\CatalogController;
+use App\Http\Controllers\ProductController;
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
 
 Route::get('belajar',[BelajarController::class, 'index']);
 Route::get('tambah',[BelajarController::class, 'tambah'])->name('tambah');
@@ -29,3 +30,7 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::post('/settings', [\App\Http\Controllers\SettingController::class,'update'])->name('settings.update');
      
      });
+
+Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/category/{slug}', [CatalogController::class, 'category'])->name('category.show');
+Route::get('/product/{slug}', [CatalogController::class, 'product'])->name('product.show');

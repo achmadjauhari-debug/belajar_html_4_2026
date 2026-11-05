@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -29,4 +30,5 @@ class Product extends Model
         //setelah itu masuk ke resources/views/admin/product/index.blade.php, kita panggil relasi category dengan $item->category->name untuk menampilkan nama kategori pada tabel produk
         
     }
+
 }

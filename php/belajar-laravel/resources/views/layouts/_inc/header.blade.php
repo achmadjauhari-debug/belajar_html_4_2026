@@ -53,8 +53,8 @@
                 <!-- Logo container -->
                 <div class="col-6 col-md-3 col-lg-3">
                     <a class="d-inline-block" href="index.html">
-                        <img alt="Garuda Indonesia - Pancasila" class="img-fluid"
-                            src="{{ asset('assets/images/itikaaf.jpg') }}"
+                        <img alt="{{ $settings['site_name'] ?? '' }} - {{ $settings['site_tagline'] ?? '' }}" class="img-fluid"
+                            src="{{ asset('storage/' . $settings['site_logo'] ?? '') }}"
                             style="max-height: 60px; width: auto;" />
                     </a>
                 </div>

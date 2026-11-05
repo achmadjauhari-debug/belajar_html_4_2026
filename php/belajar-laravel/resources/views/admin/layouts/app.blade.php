@@ -128,6 +128,8 @@
     <script src="{{ asset('assets/js/dashboard.js') }}"></script>
 
     {{-- QUILL --}}
+
+
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {

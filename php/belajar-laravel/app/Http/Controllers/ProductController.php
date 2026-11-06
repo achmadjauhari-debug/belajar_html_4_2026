@@ -46,7 +46,7 @@ class ProductController extends Controller
             // 'image' => 'nullable|image|mimes:png,jpg,jpeg,gif', 
             'name'  => 'required|string|max:60',
             'slug'  => 'nullable|string|max:60|unique:products,slug',
-            'price' => 'required|numeric',
+            'price' => 'nullable|numeric',
             'price_art_cartoon' => 'nullable|numeric',
             'price_art_paper' => 'nullable|numeric',
             'price_hvs' => 'nullable|numeric',
@@ -63,37 +63,60 @@ class ProductController extends Controller
             'alt'       => 'nullable|array',
             'alt.*'     => 'nullable|string|max:255', // Validasi setiap alt text dalam array
             'sort_order' => 'nullable|array',
-            'sort_order.*' => 'nullable|integer', // Validasi setiap sort order dalam array
-
+            
         ]);
         
         //ada 2 tabel product dan product_images, jadi kita harus menyimpan data ke tabel product terlebih dahulu, baru kemudian menyimpan data ke tabel product_images
         //transaction untuk menyimpan data ke tabel product dan product_images sekaligus, jika salah satu gagal maka semua akan dibatalkan
         DB::transaction(function() use ($request, $validated) {
+           
             $product = Product::create([
                 'category_id'   => $validated['category_id'],             
                 'name'          => $validated['name'],
+                'price'         => $validated['price'],
+                'sort_order' => $validated['sort_order'] ?? 0,
+                'image' => null, // Inisialisasi image utama sebagai null, akan diupdate nanti jika ada gambar
+                'slug'          => Str::slug($validated['name']),
+                'brief_description' => $validated['brief_description'] ?? null,
+                'description' => $validated['description'] ?? null, 
+                'price_art_cartoon' => $validated['price_art_cartoon'] ?? null,
+                'price_art_paper' => $validated['price_art_paper'] ?? null,
+                'price_hvs' => $validated['price_hvs'] ?? null,
+                'price_doft' => $validated['price_doft'] ?? null,
+                'price_glossy' => $validated['price_glossy'] ?? null,
+                'price_cutting' => $validated['price_cutting'] ?? null,
+                'price_no_cutting' => $validated['price_no_cutting'] ?? null,
+                
+                
             ]);
 
               if ($request->hasFile('images')) 
             {
                 $imageData=[];
+                $imagePath = $path;
 
                 foreach ($request->file('images') as $key => $file) {
                     $path = $file->store('products', 'public');
+                    if ($key === 0) {
+                        $firstImageData = $path; // Simpan path gambar pertama
+                    }
                
 
                     $imageData[] = [
                         'path' => $path,
-                        'alt' => $request['alt'][$key] ?? $product->name,
+                        'alt' => $request->input('alt.{key}') ?? $product->name,
                         'sort_order' => $key + 1, // Default sort order berdasarkan urutan upload
                     ];
                 }
                 $product->images()->createMany($imageData);
+                if ($imagePath) {
+                    $product->update(['image' => $imagePath]); // Update gambar utama produk dengan gambar pertama
+                  
+                }
             }
     }); 
             return redirect()->route('admin.product.index')->with('success', 'Produk berhasil ditambahkan');
-    };
+    
 
 
         $imagePath = null;
@@ -106,8 +129,6 @@ class ProductController extends Controller
             'image' => $imagePath,
             'name' => $validated['name'],
             'slug' => Str::slug($validated['name']),
-            'brief_description' => $validated['brief_description'],
-            'description' => $validated['description'],
             'price' => $validated['price'],
             'price_art_cartoon' => $validated['price_art_cartoon'],
             'price_art_paper' => $validated['price_art_paper'],
@@ -116,6 +137,8 @@ class ProductController extends Controller
             'price_glossy' => $validated['price_glossy'],
             'price_cutting' => $validated['price_cutting'],
             'price_no_cutting' => $validated['price_no_cutting'],
+            'brief_description' => $validated['brief_description'],
+            'description' => $validated['description'],
         ]);
         
         return redirect()->route('admin.product.index')->with('success', 'Produk berhasil ditambahkan');
@@ -156,10 +179,17 @@ class ProductController extends Controller
     ]);
         $validated = $request->validate([
             'category_id' => 'required|exists:categories,id',
-            'name'  => 'required|string|max:60',
-            'slug'  => ['required', 'string', 'max:60', Rule::unique('products', 'slug')->ignore($product->id)],
-            'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:png,jpg,jpeg,gif|max:2048',
+            'name'  => 'required|string|max:60',
+            'slug'  => ['nullable', 'string', 'max:60', Rule::unique('products', 'slug')->ignore($product->id)],
+            'price' => 'nullable|numeric',
+            'price_art_cartoon' => $validated['price_art_cartoon'] ?? null,
+            'price_art_paper' => $validated['price_art_paper'] ?? null,
+            'price_hvs' => $validated['price_hvs'] ?? null,
+            'price_doft' => $validated['price_doft'] ?? null,
+            'price_glossy' => $validated['price_glossy'] ?? null,
+            'price_cutting' => $validated['price_cutting'] ?? null,
+            'price_no_cutting' => $validated['price_no_cutting'] ?? null,
             'brief_description' => 'nullable|string',
             'description' => 'nullable|string',
         ]);
@@ -175,6 +205,13 @@ class ProductController extends Controller
             'name'  => $validated['name'],
             'slug'  => $validated['slug'],
             'price' => $validated['price'],
+            'price_art_cartoon' => $validated['price_art_cartoon'] ?? null,
+            'price_art_paper' => $validated['price_art_paper'] ?? null,
+            'price_hvs' => $validated['price_hvs'] ?? null,
+            'price_doft' => $validated['price_doft'] ?? null,
+            'price_glossy' => $validated['price_glossy'] ?? null,
+            'price_cutting' => $validated['price_cutting'] ?? null,
+            'price_no_cutting' => $validated['price_no_cutting'] ?? null,
             'brief_description' => $validated['brief_description'],
             'description' => $validated['description'],
         ]);

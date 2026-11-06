@@ -79,52 +79,49 @@
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Art Cartoon</label>
-                        <input type="number" class="form-control" name="price_art_cartoon" required
+                        <input type="number" class="form-control" name="price_art_cartoon"
                             value="{{ old('price_art_cartoon') }}">
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Art Paper</label>
-                        <input type="number" class="form-control" name="price_art_paper" required
+                        <input type="number" class="form-control" name="price_art_paper"
                             value="{{ old('price_art_paper') }}">
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga HVS</label>
-                        <input type="number" class="form-control" name="price_hvs" required
-                            value="{{ old('price_hvs') }}">
+                        <input type="number" class="form-control" name="price_hvs" value="{{ old('price_hvs') }}">
                     </div>
                 </div>
 
             </div>
-           
+
             {{-- HARGA LAMINATING --}}
             <div class="row">
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Laminating Doft</label>
-                        <input type="number" class="form-control" name="price_doft" required
-                            value="{{ old('price_doft') }}">
+                        <input type="number" class="form-control" name="price_doft" value="{{ old('price_doft') }}">
 
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Laminating Glossy</label>
-                        <input type="number" class="form-control" name="price_glossy" required
-                            value="{{ old('price_glossy') }}">
+                        <input type="number" class="form-control" name="price_glossy" value="{{ old('price_glossy') }}">
                     </div>
                 </div>
 
             </div>
-                        {{-- HARGA POTONG --}}
+            {{-- HARGA POTONG --}}
             <div class="row">
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Potong (Min 5x5 cm)</label>
-                        <input type="number" class="form-control" name="price_cutting" required
+                        <input type="number" class="form-control" name="price_cutting"
                             value="{{ old('price_cutting') }}">
 
                     </div>
@@ -132,7 +129,7 @@
                 <div class="col-sm-3">
                     <div class="mb-3">
                         <label for="" class="form-label-custom">Harga Tanpa Potong</label>
-                        <input type="number" class="form-control" name="price_no_cutting" required
+                        <input type="number" class="form-control" name="price_no_cutting"
                             value="{{ old('price_no_cutting') }}">
                     </div>
                 </div>

@@ -12,30 +12,26 @@
                         </button>
                         <ul class="dropdown-menu shadow border-0 mt-2 py-2"
                             style="font-size: 0.85rem; min-width: 220px;">
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-printer text-primary me-2"></i> Digital Printing</a></li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-tag text-primary me-2"></i> Sticker</a></li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-person-badge text-primary me-2"></i> NameCard &amp; Invitation</a>
-                            </li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-easel text-primary me-2"></i> Display Promotion</a></li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-signpost-2 text-primary me-2"></i> Large Format</a></li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-file-text text-primary me-2"></i> Stationary</a></li>
-                            <li><a class="dropdown-item py-1 fw-medium" href="#"><i
-                                        class="bi bi-box-seam text-primary me-2"></i> Packaging</a></li>
+                            @foreach ($categories as $category)
+                                <li><a class="dropdown-item py-1 fw-medium"
+                                        href="{{ route('category.show', $category->slug) }}">
+                                        <i
+                                            class="bi {{ $category->icon }} text-primary me-2"></i>{{ $category->name }}</a>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <nav aria-label="Navigasi Header Atas" class="d-flex align-items-center ms-2">
-                        <a class="nav-top-link active" href="index.html"><i class="bi bi-house-door"></i> Beranda</a>
-                        <a class="nav-top-link" href="katalog.html"><i class="bi bi-layers"></i> Semua Produk</a>
+                        <a class="nav-top-link active" href="/"><i class="bi bi-house-door"></i> Beranda</a>
+                        <a class="nav-top-link" href="{{ route('product.index') }}"><i class="bi bi-layers"></i> Semua
+                            Produk</a>
                         <a class="nav-top-link" href="outlet.html"><i class="bi bi-geo-alt"></i> Outlet Kami</a>
-                        <a class="nav-top-link" href="faq.html"><i class="bi bi-question-circle"></i> FAQ</a>
-                        <a class="nav-top-link" href="kontak.html"><i class="bi bi-telephone"></i> Hubungi Kami</a>
-                        <a class="nav-top-link" href="blog.html"><i class="bi bi-journal-text"></i> Blog</a>
+                        <a class="nav-top-link" href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i>
+                            FAQ</a>
+                        <a class="nav-top-link" href="{{ route('contact.index') }}"><i class="bi bi-telephone"></i>
+                            Hubungi Kami</a>
+                        <a class="nav-top-link" href="{{ route('blog.index') }}"><i class="bi bi-journal-text"></i>
+                            Blog</a>
                     </nav>
                 </div>
                 <div class="d-flex align-items-center gap-3 text-muted" style="font-size: 0.8rem;">
@@ -53,8 +49,8 @@
                 <!-- Logo container -->
                 <div class="col-6 col-md-3 col-lg-3">
                     <a class="d-inline-block" href="index.html">
-                        <img alt="{{ $settings['site_name'] ?? '' }} - {{ $settings['site_tagline'] ?? '' }}" class="img-fluid"
-                            src="{{ asset('storage/' . $settings['site_logo'] ?? '') }}"
+                        <img alt="{{ $settings['site_name'] ?? '' }} - {{ $settings['site_tagline'] ?? '' }}"
+                            class="img-fluid" src="{{ asset('storage/' . $settings['site_logo'] ?? '') }}"
                             style="max-height: 60px; width: auto;" />
                     </a>
                 </div>

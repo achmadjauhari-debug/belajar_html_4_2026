@@ -17,6 +17,7 @@
         rel="stylesheet" />
     <!-- Core Theme & Layout Styles -->
     <link href="{{asset('asset-web/assets/css/style.css')}}" rel="stylesheet" />
+    <link href="{{asset('asset-web/assets/css/faq.css')}}" rel="stylesheet"/>
 </head>
 
 <body>

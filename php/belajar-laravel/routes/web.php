@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BelajarController;
 use App\Http\Controllers\CatalogController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PageController;
 
 
 Route::get('belajar',[BelajarController::class, 'index']);
@@ -16,7 +18,7 @@ route::post('actionBagi', [BelajarController::class, 'actionBagi'])->name('actio
 Route::get('perkalian',[BelajarController::class, 'kali'])->name('perkalian');;
 route::post('actionKali', [BelajarController::class, 'actionKali'])->name('actionKali');
 
-//prefix
+//PREFIX ADMIN
 Route::prefix('admin')->name('admin.')->group(function() {
     Route::get('/login', [\App\Http\Controllers\LoginController::class, 'login']);
     Route::post('/actionLogin', [\App\Http\Controllers\LoginController::class, 'actionLogin'])->name('actionLogin');
@@ -31,6 +33,10 @@ Route::prefix('admin')->name('admin.')->group(function() {
      
      });
 
-Route::get('/', [\App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index']);
 Route::get('/category/{slug}', [CatalogController::class, 'category'])->name('category.show');
+Route::get('/product', [CatalogController::class, 'listing'])->name('product.index');
 Route::get('/product/{slug}', [CatalogController::class, 'product'])->name('product.show');
+Route::get('/faq', [PageController::class, 'faq'])->name('faq.index');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact.index');
+Route::get('/blog', [PageController::class, 'blog'])->name('blog.index');

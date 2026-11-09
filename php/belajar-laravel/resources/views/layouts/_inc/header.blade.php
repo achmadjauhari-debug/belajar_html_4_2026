@@ -25,7 +25,7 @@
                         <a class="nav-top-link active" href="/"><i class="bi bi-house-door"></i> Beranda</a>
                         <a class="nav-top-link" href="{{ route('product.index') }}"><i class="bi bi-layers"></i> Semua
                             Produk</a>
-                        <a class="nav-top-link" href="outlet.html"><i class="bi bi-geo-alt"></i> Outlet Kami</a>
+                        <a class="nav-top-link" href="{{ route('outlet.index') }}""><i class="bi bi-geo-alt"></i> Outlet Kami</a>
                         <a class="nav-top-link" href="{{ route('faq.index') }}"><i class="bi bi-question-circle"></i>
                             FAQ</a>
                         <a class="nav-top-link" href="{{ route('contact.index') }}"><i class="bi bi-telephone"></i>

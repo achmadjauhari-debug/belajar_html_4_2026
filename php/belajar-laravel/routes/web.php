@@ -27,16 +27,20 @@ Route::prefix('admin')->name('admin.')->group(function() {
     Route::resource('/user', \App\Http\Controllers\UserController::class);
     Route::resource('/category', \App\Http\Controllers\CategoryController::class);
     Route::resource('/product', \App\Http\Controllers\ProductController::class);
+    Route::resource('/category_blog', \App\Http\Controllers\CategoryBlogController::class);
+    Route::resource('blog', \App\Http\Controllers\BlogController::class);
     
     Route::get('/settings', [\App\Http\Controllers\SettingController::class,'index'])->name('settings');
     Route::post('/settings', [\App\Http\Controllers\SettingController::class,'update'])->name('settings.update');
      
+    
      });
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/category/{slug}', [CatalogController::class, 'category'])->name('category.show');
 Route::get('/product', [CatalogController::class, 'listing'])->name('product.index');
 Route::get('/product/{slug}', [CatalogController::class, 'product'])->name('product.show');
+Route::get('/outlet', [PageController::class, 'outlet'])->name('outlet.index');
 Route::get('/faq', [PageController::class, 'faq'])->name('faq.index');
 Route::get('/contact', [PageController::class, 'contact'])->name('contact.index');
 Route::get('/blog', [PageController::class, 'blog'])->name('blog.index');

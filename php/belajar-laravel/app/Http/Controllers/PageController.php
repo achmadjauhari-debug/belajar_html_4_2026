@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+use App\Models\Setting; //untuk input
+
 class PageController extends Controller
 {
     public function faq()
@@ -13,7 +15,8 @@ class PageController extends Controller
 
     public function contact()
     {
-        return view('contact.index');
+        $setting = Setting::get();//untuk input
+        return view('contact.index', compact('setting'));
     }
 
     public function blog()
@@ -25,4 +28,9 @@ class PageController extends Controller
     {
         return view('blog.show');
     }
+        public function outlet()
+    {
+        return view('outlet.index');               
+    }
+
 }

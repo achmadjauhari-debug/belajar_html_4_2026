@@ -56,9 +56,16 @@
             </a>
           </li>
           <li class="sidebar-menu-item">
-            <a href="{{route('admin.product.index')}}" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
+            <a href="{{route('admin.category_blog.index')}}" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
               <i class="bi bi-file-earmark"></i>
-              <span>Produk</span>
+              <span>Kategori Blog</span>
+            </a>
+          </li>
+          </li>
+          <li class="sidebar-menu-item">
+            <a href="{{route('admin.blog.index')}}" class="sidebar-menu-link" id="menu-blankpage" title="Blank Page">
+              <i class="bi bi-file-earmark"></i>
+              <span>Blog</span>
             </a>
           </li>
           <li class="sidebar-menu-item">

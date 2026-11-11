@@ -133,7 +133,7 @@
     <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Define explicit formatting toolbar
+            // 1. Opsi Toolbar (Pastikan hanya tertulis sekali)
             const toolbarOptions = [
                 [{
                     'header': [1, 2, 3, false]
@@ -152,33 +152,66 @@
                 ['clean']
             ];
 
-            // Initialize Brief Description Editor
-            const quillBrief = new Quill('#editor-brief', {
-                theme: 'snow',
-                modules: {
-                    toolbar: toolbarOptions
-                }
-            });
+            // 2. Inisialisasi secara aman menggunakan objek window global
+            window.quillBriefInstance = null;
+            window.quillFullInstance = null;
+            window.quillContentInstance = null;
 
-            // Initialize Full Description Editor
-            const quillFull = new Quill('#editor-full', {
-                theme: 'snow',
-                modules: {
-                    toolbar: toolbarOptions
-                }
-            });
-
-            // Sync Quill HTML content to hidden inputs before form submit
-            const form = document.querySelector('form');
-            if (form) {
-                form.addEventListener('submit', function() {
-                    const briefInput = document.querySelector('#brief_description');
-                    const fullInput = document.querySelector('#description');
-
-                    if (briefInput) briefInput.value = quillBrief.root.innerHTML;
-                    if (fullInput) fullInput.value = quillFull.root.innerHTML;
+            if (document.querySelector('#editor-brief')) {
+                window.quillBriefInstance = new Quill('#editor-brief', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: toolbarOptions
+                    }
                 });
             }
+
+            if (document.querySelector('#editor-full')) {
+                window.quillFullInstance = new Quill('#editor-full', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: toolbarOptions
+                    }
+                });
+            }
+
+            if (document.querySelector('#editor-content')) {
+                window.quillContentInstance = new Quill('#editor-content', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: toolbarOptions
+                    }
+                });
+            }
+
+        // 3. PERBAIKAN AKHIR: Sinkronisasi langsung dipicu saat tombol Simpan diklik
+        const btnSimpan = document.querySelector('#btn-simpan-blog');
+        if (btnSimpan) {
+            btnSimpan.addEventListener('click', function() {
+                const briefInput = document.querySelector('#brief_description');
+                const contentInput = document.querySelector('#content');
+                const fullInput = document.querySelector('#description');
+
+                // Sinkronisasi Deskripsi Singkat
+                if (briefInput && window.quillBriefInstance) {
+                    const text = window.quillBriefInstance.getText().trim();
+                    briefInput.value = (text === '') ? '' : window.quillBriefInstance.root.innerHTML;
+                }
+
+                // Sinkronisasi Konten Utama Blog
+                if (contentInput && window.quillContentInstance) {
+                    const text = window.quillContentInstance.getText().trim();
+                    contentInput.value = (text === '') ? '' : window.quillContentInstance.root.innerHTML;
+                }
+
+                // Sinkronisasi Full Deskripsi (Jika ada)
+                if (fullInput && window.quillFullInstance) {
+                    const text = window.quillFullInstance.getText().trim();
+                    fullInput.value = (text === '') ? '' : window.quillFullInstance.root.innerHTML;
+                }
+            });
+        }
+
         });
     </script>
 </body>

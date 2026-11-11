@@ -353,7 +353,7 @@
                             <div class="text-muted text-uppercase fw-semibold"
                                 style="font-size: 0.7rem; letter-spacing: 0.5px;">{{ $category->name ?? ''}}</div>
                             <h3 class="card-title h6 fw-bold text-dark mt-1 mb-2 text-truncate"
-                                title=""{{ $product->name ?? '' }}">{{ $product->name ?? '' }}</h3>
+                                title="{{ $product->name ?? '' }}">{{ $product->name ?? '' }}</h3>
 
                             <div class="mt-auto">
                                 <div class="text-secondary small mb-0" style="font-size: 0.75rem;">Mulai dari</div>

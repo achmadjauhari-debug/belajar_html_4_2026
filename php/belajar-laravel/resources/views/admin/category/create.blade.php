@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="card p-4"> {{-- Ditambahkan wrapper card agar form terlihat rapi --}}
-<form action="{{route('admin.category.store')}}" method="post">
+<form action="{{route('admin.category.store')}}" method="post" >
     @csrf
     <div class="mb-3">
             <label for="" class="form-label-custom">Nama Kategori</label>

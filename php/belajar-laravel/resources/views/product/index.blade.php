@@ -360,7 +360,7 @@
                                 <div class="h6 fw-bold text-danger mb-3">Rp {{ $product->price ?? '' }}<span
                                         class="fw-normal text-muted small">/ box</span></div>
                                 <a class="btn btn-outline-primary btn-sm rounded-pill w-100 fw-semibold"
-                                    href="{{ route('product.show', $product->slug) }}">Lihat Opsi / Order</a>
+                                    href="{{ $product->slug ? route('product.show', $product->slug) : '#'}}">Lihat Opsi / Order</a>
                             </div>
                         </div>
                     </div>              

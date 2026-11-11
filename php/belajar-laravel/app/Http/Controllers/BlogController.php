@@ -43,17 +43,17 @@ class BlogController extends Controller
     {
         $validated =    $request->validate([
             'name'  => 'required|string|max:60',
-            'blog_category_id' => 'required|exists:category_blog,id',
-            'brief_description' => 'nullable|string',
-            'slug'  => 'nullable|string|max:60|unique:category_blog,slug',
-            'content' => 'nullable|string',
+            'blog_category_id' => 'required|exists:category_blogs,id',
+            'brief_description' => 'required|string',
+            'slug'  => 'nullable|string|max:60|unique:blogs,slug',
+            'content' => 'required|string',
             'author' => 'nullable|string',
-            'cover_path' => 'image|mimes:png,jpeg,webp|max:2048',
+            'cover_path' => 'nullable|image|mimes:png,jpeg,webp|max:2048',
             
         ]);
 
         if($request->hasFile('cover_path')) {
-            $validate['cover_path'] = $request->file('cover_path')->store('blogs', 'public');
+            $validated['cover_path'] = $request->file('cover_path')->store('blogs', 'public');
         }
         
         $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : Str::slug($validated['name']);
@@ -97,10 +97,10 @@ class BlogController extends Controller
         // If the slug input is empty, fall back to the product name.
         $validated =    $request->validate([
             'name'  => 'required|string|max:60',
-            'blog_category_id' => 'required|exists:category_blog,id',
-            'brief_description' => 'nullable|string',
-            'slug'  => 'nullable|string|max:60|unique:category_blog,slug',
-            'content' => 'nullable|string',
+            'blog_category_id' => 'required|exists:category_blogs,id',
+            'brief_description' => 'required|string',
+            'slug'  => 'nullable|string|max:60|unique:category_blogs,slug',
+            'content' => 'required|string',
             'author' => 'nullable|string',
             'cover_path' => 'image|mimes:png,jpeg,webp|max:2048',
             
@@ -130,8 +130,8 @@ class BlogController extends Controller
     {
         $blog = Blog::find($id);
 
-        if($block->img) {
-            Storage::disk('public')->delete($blog->img);
+        if($blog->cover_path) {
+            Storage::disk('public')->delete($blog->cover_path);
         }
         $blog->delete();
         return redirect()->route('admin.blog.index')->with('success', 'Blog berhasil dihapus');
